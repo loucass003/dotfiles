@@ -1,0 +1,3 @@
+[submodule "secrets-llelievr"]
+	path = home/llelievr/secrets
+	url = git@github.com:loucass003/secrets-llelievr.git
