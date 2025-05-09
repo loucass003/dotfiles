@@ -87,6 +87,7 @@
     pciutils # lspci
     usbutils # lsusb
     wireplumber
+
     easyeffects
     pwvucontrol
 
@@ -99,12 +100,15 @@
     xdg-desktop-portal-gtk
     bottles
 
+    lutris
+
     parsec-bin
   ];
 
   # basic configuration of git, please change to your own
   programs.git = {
     enable = true;
+    lfs.enable = true;
     userName = "loucass003";
     userEmail = "loucass003@gmail.com";
     extraConfig = {

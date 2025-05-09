@@ -98,6 +98,7 @@
       "networkmanager"
       "wheel"
       "audio"
+      "docker"
     ];
     shell = pkgs.zsh;
   };
@@ -110,6 +111,14 @@
       extraOptions = "--log-opt max-size=10m --log-opt max-file=3";
     };
   };
+
+  # virtualisation.podman = {
+  #   enable = true;
+  # };
+
+  # environment.shellInit = ''
+  #   [ -n "$DISPLAY" ] && xhost +si:localuser:$USER || true
+  # '';
 
   systemd = {
     user.services.polkit-gnome-authentication-agent-1 = {
@@ -142,6 +151,8 @@
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     git
+
+    # distrobox
   ];
 
   hardware.bluetooth.enable = true;

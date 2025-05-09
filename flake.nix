@@ -2,6 +2,7 @@
   description = "A simple NixOS flake";
 
   inputs = {
+    self.submodules = true;
     # NixOS official package source, using the nixos-24.11 branch here
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
@@ -36,8 +37,46 @@
         inherit system;
         config.allowUnfree = true;
       };
+      mkWindowsApp = callPackage ./pkgs/mkwindowsapp { makeBinPath = pkgs.lib.makeBinPath; };
       lib = nixpkgs.lib;
       callPackage = pkgs.callPackage;
+
+      # fusion360 = callPackage ./pkgs/fusion360 {
+      #   inherit mkWindowsApp;
+      #   wine = (
+      #     pkgs.wineWowPackages.stable.override {
+      #       alsaSupport = true;
+      #       cairoSupport = true;
+      #       cupsSupport = true;
+      #       cursesSupport = true;
+      #       dbusSupport = true;
+      #       embedInstallers = true;
+      #       fontconfigSupport = true;
+      #       gettextSupport = true;
+      #       gphoto2Support = true;
+      #       gstreamerSupport = true;
+      #       gtkSupport = true;
+      #       krb5Support = true;
+      #       mingwSupport = true;
+      #       netapiSupport = true;
+      #       odbcSupport = true;
+      #       openclSupport = true;
+      #       openglSupport = true;
+      #       pcapSupport = true;
+      #       pulseaudioSupport = true;
+      #       saneSupport = true;
+      #       sdlSupport = true;
+      #       tlsSupport = true;
+      #       udevSupport = true;
+      #       usbSupport = true;
+      #       v4lSupport = true;
+      #       vaSupport = true;
+      #       vulkanSupport = true;
+      #       waylandSupport = true;
+      #     }
+      #   );
+      #   wineArch = "win64";
+      # };
     in
     {
       nixosConfigurations = {
@@ -51,7 +90,12 @@
           };
 
           modules = [
-            # { environment.systemPackages = [ (callPackage ./pkgs/fusion360.nix { }) ]; }
+            {
+              environment.systemPackages =
+                [
+                  # fusion360
+                ];
+            }
             { nixpkgs.overlays = [ hyprpanel.overlay ]; }
             ./configuration.nix
             home-manager.nixosModules.home-manager

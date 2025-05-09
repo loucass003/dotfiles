@@ -13,6 +13,7 @@
     overskride
     grim
     slurp
+    phinger-cursors
   ];
 
   services.dunst = {
@@ -34,4 +35,10 @@
     recursive = true;
   };
 
+  home.pointerCursor = {
+    name = "phinger-cursors-light";
+    package = pkgs.phinger-cursors;
+    size = 32;
+    gtk.enable = true;
+  };
 }
