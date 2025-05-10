@@ -14,9 +14,15 @@
       url = "github:Duckonaut/split-monitor-workspaces";
       inputs.hyprland.follows = "hyprland";
     };
-    ags.url = "github:Aylur/ags";
+    # ags.url = "github:Aylur/ags";
     hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
     hyprpanel.inputs.nixpkgs.follows = "nixpkgs";
+
+    nix-gaming.url = "github:fufexan/nix-gaming";
+    hyprspace = {
+      url = "github:KZDKM/Hyprspace";
+      inputs.hyprland.follows = "hyprland";
+    };
   };
 
   outputs =
@@ -24,12 +30,8 @@
       self,
       nixpkgs,
       home-manager,
-      hyprland,
-      split-monitor-workspaces,
-      hyprpanel,
-      ags,
       ...
-    }:
+    }@inputs:
 
     let
       system = "x86_64-linux";
@@ -41,62 +43,59 @@
       lib = nixpkgs.lib;
       callPackage = pkgs.callPackage;
 
-      # fusion360 = callPackage ./pkgs/fusion360 {
-      #   inherit mkWindowsApp;
-      #   wine = (
-      #     pkgs.wineWowPackages.stable.override {
-      #       alsaSupport = true;
-      #       cairoSupport = true;
-      #       cupsSupport = true;
-      #       cursesSupport = true;
-      #       dbusSupport = true;
-      #       embedInstallers = true;
-      #       fontconfigSupport = true;
-      #       gettextSupport = true;
-      #       gphoto2Support = true;
-      #       gstreamerSupport = true;
-      #       gtkSupport = true;
-      #       krb5Support = true;
-      #       mingwSupport = true;
-      #       netapiSupport = true;
-      #       odbcSupport = true;
-      #       openclSupport = true;
-      #       openglSupport = true;
-      #       pcapSupport = true;
-      #       pulseaudioSupport = true;
-      #       saneSupport = true;
-      #       sdlSupport = true;
-      #       tlsSupport = true;
-      #       udevSupport = true;
-      #       usbSupport = true;
-      #       v4lSupport = true;
-      #       vaSupport = true;
-      #       vulkanSupport = true;
-      #       waylandSupport = true;
-      #     }
-      #   );
-      #   wineArch = "win64";
-      # };
+      fusion360 = callPackage ./pkgs/fusion360 {
+        inherit inputs;
+        #   inherit mkWindowsApp;
+        #   wine = (
+        #     pkgs.wineWowPackages.stable.override {
+        #       alsaSupport = true;
+        #       cairoSupport = true;
+        #       cupsSupport = true;
+        #       cursesSupport = true;
+        #       dbusSupport = true;
+        #       embedInstallers = true;
+        #       fontconfigSupport = true;
+        #       gettextSupport = true;
+        #       gphoto2Support = true;
+        #       gstreamerSupport = true;
+        #       gtkSupport = true;
+        #       krb5Support = true;
+        #       mingwSupport = true;
+        #       netapiSupport = true;
+        #       odbcSupport = true;
+        #       openclSupport = true;
+        #       openglSupport = true;
+        #       pcapSupport = true;
+        #       pulseaudioSupport = true;
+        #       saneSupport = true;
+        #       sdlSupport = true;
+        #       tlsSupport = true;
+        #       udevSupport = true;
+        #       usbSupport = true;
+        #       v4lSupport = true;
+        #       vaSupport = true;
+        #       vulkanSupport = true;
+        #       waylandSupport = true;
+        #     }
+        #   );
+        #   wineArch = "win64";
+      };
     in
     {
       nixosConfigurations = {
         nixos = lib.nixosSystem rec {
           inherit system;
           specialArgs = {
-            inherit hyprland;
-            inherit split-monitor-workspaces;
-            inherit ags;
-            inherit hyprpanel;
+            inherit inputs;
           };
 
           modules = [
             {
-              environment.systemPackages =
-                [
-                  # fusion360
-                ];
+              environment.systemPackages = [
+                fusion360
+              ];
             }
-            { nixpkgs.overlays = [ hyprpanel.overlay ]; }
+            { nixpkgs.overlays = [ inputs.hyprpanel.overlay ]; }
             ./configuration.nix
             home-manager.nixosModules.home-manager
             {

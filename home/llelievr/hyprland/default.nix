@@ -1,32 +1,53 @@
 {
   config,
-  split-monitor-workspaces,
-  hyprland,
+  inputs,
   pkgs,
   ...
 }:
 
 {
   home.packages = with pkgs; [
-    copyq
     nautilus
     overskride
     grim
     slurp
     phinger-cursors
+    wl-clipboard
+    wl-clip-persist
   ];
+
+  services.clipman.enable = true;
 
   services.dunst = {
     enable = true;
   };
 
+  dconf.settings = {
+    "org/gnome/desktop/background" = {
+      picture-uri-dark = "file://${pkgs.nixos-artwork.wallpapers.nineish-dark-gray.src}";
+    };
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+    };
+  };
+
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Adwaita-dark";
+      package = pkgs.gnome-themes-extra;
+    };
+  };
+
   wayland.windowManager.hyprland = {
     enable = true;
-    package = hyprland.packages.${pkgs.system}.hyprland;
-    portalPackage = hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+    portalPackage =
+      inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
     extraConfig = builtins.readFile ./config/hyprland.conf;
     plugins = [
-      split-monitor-workspaces.packages.${pkgs.system}.split-monitor-workspaces
+      inputs.split-monitor-workspaces.packages.${pkgs.system}.split-monitor-workspaces
+      inputs.hyprspace.packages.${pkgs.system}.Hyprspace
     ];
   };
 

@@ -1,7 +1,6 @@
 {
   config,
-  hyprpanel,
-
+  inputs,
   pkgs,
   ...
 }:
@@ -10,10 +9,10 @@ let
   secrets = import ../secrets;
 in
 {
-  imports = [ hyprpanel.homeManagerModules.hyprpanel ];
+  imports = [ inputs.hyprpanel.homeManagerModules.hyprpanel ];
 
   home.packages = [
-    hyprpanel
+    inputs.hyprpanel
   ];
 
   # all the properties here https://github.com/Jas-SinghFSU/HyprPanel/blob/master/nix/module.nix#L94
@@ -29,6 +28,7 @@ in
       menus.clock.weather.location = "Rotterdam";
       menus.clock.weather.unit = "metric";
       bar.launcher.icon = "";
+      bar.workspaces.showWsIcons = true;
       bar.workspaces.showApplicationIcons = true;
       menus.dashboard.powermenu.avatar.image = "${./config/assets/profile.png}";
       layout = {

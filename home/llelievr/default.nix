@@ -49,7 +49,6 @@
       ];
     })
     google-chrome
-    vscode
     steam
 
     # utils
@@ -103,6 +102,11 @@
     lutris
 
     parsec-bin
+
+    baobab
+    loupe
+    file-roller
+    gedit
   ];
 
   # basic configuration of git, please change to your own
@@ -114,6 +118,43 @@
     extraConfig = {
       init.defaultBranch = "main";
       push.autoSetupRemote = true;
+    };
+  };
+
+  programs.vscode = {
+    enable = true;
+    userSettings = {
+      # This property will be used to generate settings.json:
+      # https://code.visualstudio.com/docs/getstarted/settings#_settingsjson
+      "editor.formatOnSave" = true;
+    };
+  };
+
+  xdg = {
+    enable = true;
+    mimeApps = {
+      enable = true;
+      defaultApplications = {
+        "application/json" = [ "gedit.desktop" ];
+        "text/plain" = [ "gedit.desktop" ];
+        "application/zip" = "org.gnome.FileRoller.desktop";
+        "application/rar" = "org.gnome.FileRoller.desktop";
+        "application/7z" = "org.gnome.FileRoller.desktop";
+        "application/*tar" = "org.gnome.FileRoller.desktop";
+        "text/html" = "google-chrome.desktop";
+        "x-scheme-handler/http" = "google-chrome.desktop";
+        "x-scheme-handler/https" = "google-chrome.desktop";
+        "x-scheme-handler/ftp" = "google-chrome.desktop";
+        "x-scheme-handler/chrome" = "google-chrome.desktop";
+        "x-scheme-handler/about" = "google-chrome.desktop";
+        "x-scheme-handler/unknown" = "google-chrome.desktop";
+        "application/x-extension-htm" = "google-chrome.desktop";
+        "application/x-extension-html" = "google-chrome.desktop";
+        "application/x-extension-shtml" = "google-chrome.desktop";
+        "application/xhtml+xml" = "google-chrome.desktop";
+        "application/x-extension-xhtml" = "google-chrome.desktop";
+        "application/x-extension-xht" = "google-chrome.desktop";
+      };
     };
   };
 

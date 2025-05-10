@@ -1,96 +1,124 @@
 {
-  stdenv,
-  lib,
   pkgs,
-  wine,
-  wineArch,
-  mkWindowsApp,
-  fetchurl,
-  makeWrapper,
+  stdenv,
+  inputs,
+  lib,
   ...
 }:
 let
-  version = "0.0.0";
-in
-mkWindowsApp rec {
-  inherit version wine wineArch;
+  installer = pkgs.fetchurl {
+    url = "https://dl.appstreaming.autodesk.com/production/installers/Fusion%20Admin%20Install.exe";
+    name = "FusionInstaller.exe";
+    sha256 = "xn2cauJw57mayQuGIjwBN8+IciwEACwtdw4rQsfB0Co=";
+  };
+
+  webview = pkgs.fetchurl {
+    url = "https://github.com/aedancullen/webview2-evergreen-standalone-installer-archive/releases/download/109.0.1518.78/MicrosoftEdgeWebView2RuntimeInstallerX64.exe";
+    name = "EdgeInstaller.exe";
+    sha256 = "8sxJhj4iFALUZk2fqUSkfyJUPaLcs2NDjD5Zh4m5/Vs=";
+  };
+
+  xml = pkgs.writeText "NMachineSpecificOptions.xml" ''
+    <?xml version="1.0" encoding="UTF-16" standalone="no" ?>
+    <OptionGroups>
+      <BootstrapOptionsGroup SchemaVersion="2" ToolTip="Special preferences that require the application to be restarted after a change." UserName="Bootstrap">
+        <driverOptionId ToolTip="The driver used to display the graphics" UserName="Graphics driver" Value="VirtualDeviceDx9"/></BootstrapOptionsGroup>
+    </OptionGroups>
+  '';
+
+  WINEPREFIX = "$HOME/Fusion360";
+
   pname = "fusion360";
+  version = "1.0.0";
 
-  enableVulkan = true;
-  graphicsDriverCmd = true;
-
-  # src = fetchurl {
-  #   url = "https://dl.appstreaming.autodesk.com/production/installers/Fusion%20Admin%20Install.exe";
-  #   sha256 = "xn2cauJw57mayQuGIjwBN8+IciwEACwtdw4rQsfB0Co=";
-  # };
-
-  # webview = fetchurl {
-  #   url = "https://github.com/aedancullen/webview2-evergreen-standalone-installer-archive/releases/download/109.0.1518.78/MicrosoftEdgeWebView2RuntimeInstallerX64.exe";
-  #   sha256 = "8sxJhj4iFALUZk2fqUSkfyJUPaLcs2NDjD5Zh4m5/Vs=";
-  # };
-
-  nativeBuildInputs = with pkgs; [
-    p7zip
+  tricksFmt = builtins.concatStringsSep " " [
+    "arial"
+    "vcrun2019"
+    "win10"
   ];
 
-  winAppInstall = ''
-    winetricks -q sandbox
-    sleep 5s
-    # We must install some packages!
-    winetricks -q atmlib gdiplus arial corefonts cjkfonts dotnet452 msxml4 msxml6 vcrun2017 fontsmooth=rgb winhttp win10
-    # We must install cjkfonts again then sometimes it doesn't work in the first time!
-    sleep 5s
-    winetricks -q cjkfonts
-    # We must set to Windows 10 or 11 again because some other winetricks sometimes set it back to Windows XP!
-    sleep 5s
-    winetricks -q win11
-    sleep 5s
-    wine REG ADD "HKCU\Software\Wine\DllOverrides" /v "adpclientservice.exe" /t REG_SZ /d "" /f
-    # Navigation bar does not work well with anything other than the wine builtin DX9
-    wine REG ADD "HKCU\Software\Wine\DllOverrides" /v "AdCefWebBrowser.exe" /t REG_SZ /d builtin /f
-    # Use Visual Studio Redist that is bundled with the application
-    wine REG ADD "HKCU\Software\Wine\DllOverrides" /v "msvcp140" /t REG_SZ /d native /f
-    wine REG ADD "HKCU\Software\Wine\DllOverrides" /v "mfc140u" /t REG_SZ /d native /f
-    # Fixed the problem with the bcp47langs issue and now the login works again!
-    wine reg add "HKCU\Software\Wine\DllOverrides" /v "bcp47langs" /t REG_SZ /d "" /f
-    sleep 5s
+  wine = inputs.nix-gaming.packages.${pkgs.system}.wine-ge;
+  winetricks = inputs.nix-gaming.packages.${pkgs.system}.winetricks-git;
 
-    mkdir -p $WINEPREFIX/drive_c/users/$USER/Downloads
-    WORK_DIR=$WINEPREFIX/drive_c/users/$USER/Downloads
-    echo $WORK_DIR
-    cd $WORK_DIR
-    7za e -y ${./resources/Qt6WebEngineCore.dll.7z} -o"./"
-    QT6_WEBENGINECORE=$(find "$WINEPREFIX" -name 'Qt6WebEngineCore.dll' -printf "%T+ %p\n" | sort -r | head -n 1 | sed -r 's/^[^ ]+ //')
-    QT6_WEBENGINECORE_DIR=$(dirname "$QT6_WEBENGINECORE")
-    ls $QT6_WEBENGINECORE_DIR
+  script = pkgs.writeShellScriptBin pname ''
+    # export WINEARCH="win64"
+    export WINEFSYNC=1
+    export WINEESYNC=1
+    export WINEPREFIX="${WINEPREFIX}"
+    # export WINEDLLOVERRIDES="api-ms-win-crt-private-l1-1-0,api-ms-win-crt-conio-l1-1-0,api-ms-win-crt-convert-l1-1-0,api-ms-win-crt-environment-l1-1-0,api-ms-win-crt-filesystem-l1-1-0,api-ms-win-crt-heap-l1-1-0,api-ms-win-crt-locale-l1-1-0,api-ms-win-crt-math-l1-1-0,api-ms-win-crt-multibyte-l1-1-0,api-ms-win-crt-process-l1-1-0,api-ms-win-crt-runtime-l1-1-0,api-ms-win-crt-stdio-l1-1-0,api-ms-win-crt-string-l1-1-0,api-ms-win-crt-utility-l1-1-0,api-ms-win-crt-time-l1-1-0,atl140,concrt140,msvcp140,msvcp140_1,msvcp140_atomic_wait,ucrtbase,vcomp140,vccorlib140,vcruntime140,vcruntime140_1=n,b;adpclientservice.exe="
+    # export FUSION_IDSDK=false
+    USER="$(whoami)"
+    PATH=${wine}/bin:${winetricks}/bin:$PATH
+    FUSION_LAUNCHER="$WINEPREFIX/drive_c/Users/$USER/Desktop/Autodesk Fusion.lnk"
 
-    cp -f ${./resources/DXVK.reg} ./DXVK.reg
-    cp -f ${./resources/MicrosoftEdgeWebView2RuntimeInstallerX64.exe} ./MicrosoftEdgeWebView2RuntimeInstallerX64.exe
-    cp -f ${./resources/FusionInstaller.exe} ./FusionInstaller.exe
-    ls $WORK_DIR
-    wine ./MicrosoftEdgeWebView2RuntimeInstallerX64.exe /silent /install
-    winetricks -q dxvk
-    wine regedit.exe DXVK.reg
-    wine ./FusionInstaller.exe 
-    cp -f "./Qt6WebEngineCore.dll" "$QT6_WEBENGINECORE_DIR/Qt6WebEngineCore.dll"
-    cp -f ${./resources/siappdll.dll} "$QT6_WEBENGINECORE_DIR/siappdll.dll"
+    if [ ! -d "$WINEPREFIX" ]; then
+      # create the wine prefix
+      # wine wineboot
+      # echo "Wineboot is done!"
+      # install tricks
+      winetricks -q -f ${tricksFmt}
+      wineserver -w
+      echo "Winetricks is done!"
+
+      #Remove tracking metrics/calling home
+      wine REG ADD "HKCU\Software\Wine\DllOverrides" /v "adpclientservice.exe" /t REG_SZ /d "" /f
+      #Navigation bar does not work well with anything other than the wine builtin DX9
+      wine REG ADD "HKCU\Software\Wine\DllOverrides" /v "AdCefWebBrowser.exe" /t REG_SZ /d builtin /f
+      #Use Visual Studio Redist that is bundled with the application
+      wine REG ADD "HKCU\Software\Wine\DllOverrides" /v "msvcp140" /t REG_SZ /d native /f
+      wine REG ADD "HKCU\Software\Wine\DllOverrides" /v "mfc140u" /t REG_SZ /d native /f
+
+      wine ${webview} /install
+
+      wine ${installer}
+
+      mkdir -p "$WINEPREFIX/drive_c/users/$USER/AppData/Roaming/Autodesk/Neutron Platform/Options"
+      cp ${xml} "$WINEPREFIX/drive_c/users/$USER/AppData/Roaming/Autodesk/Neutron Platform/Options"
+
+      # Disable Debug messages on regular runs, we dont have a terminal, so speed up the system by not wasting time prining them into the Void
+      # sed -i 's/=env WINEPREFIX=/=env WINEDEBUG=-all env WINEPREFIX=/g' "$HOME/.local/share/applications/wine/Programs/Autodesk/Autodesk Fusion.desktop"
+
+      wineserver -w
+    fi
+
+    cd "$WINEPREFIX"
+
+    xdg-mime default adskidmgr-opener.desktop x-scheme-handler/adskidmgr
+
+    wine "$FUSION_LAUNCHER" "$@"
     wineserver -w
-    rm -rf $WORK_DIR
   '';
+in
+stdenv.mkDerivation rec {
+  inherit version pname;
 
-  winAppRun = ''
-    wine start /unix "$WINEPREFIX/drive_c/Program Files/Notepad++/notepad++.exe" "$ARGS"
-  '';
+  dontUnpack = true;
+
+  src = installer;
+
+  nativeBuildInputs = [
+    pkgs.copyDesktopItems
+  ];
+
+  desktopItems = [
+    (pkgs.makeDesktopItem {
+      desktopName = "adskidmgr-opener.desktop";
+      name = "adskidmgr Scheme Handler";
+      exec = ''env WINEPREFIX="\\$HOME/Fusion360" wine "C:\users\$USER\AppData\Local\Autodesk\webdeploy\production\57cd45aa09be2d79663784069561ec17eda99ca8\Autodesk Identity Manager\AdskIdentityManager.exe" %u'';
+      mimeTypes = [ "x-scheme-handler/adskidmgr" ];
+    })
+  ];
 
   installPhase = ''
-    runHook preInstall
-    ln -s $out/bin/.launcher $out/bin/fusion360
-    runHook postInstall
+    mkdir -p $out/share/applications
+    copyDesktopItems
+
+    install -D ${script}/bin/fusion360 $out/bin/fusion360
   '';
 
-  meta = with lib; {
-    description = "Fusion 360";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+  meta = {
+    description = "Autodesk Fusion 360";
+    license = lib.licenses.unfree;
+    platforms = [ "x86_64-linux" ];
   };
 }
