@@ -97,6 +97,7 @@
     gtk3
     gtk4
     xdg-desktop-portal-gtk
+    xdg-user-dirs
     bottles
 
     lutris
@@ -107,6 +108,7 @@
     loupe
     file-roller
     gedit
+    plex-desktop
   ];
 
   # basic configuration of git, please change to your own
@@ -155,6 +157,9 @@
         "application/x-extension-xhtml" = "google-chrome.desktop";
         "application/x-extension-xht" = "google-chrome.desktop";
       };
+    };
+    userDirs = {
+      createDirectories = true;
     };
   };
 

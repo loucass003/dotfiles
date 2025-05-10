@@ -9,12 +9,17 @@
   home.packages = with pkgs; [
     nautilus
     overskride
-    grim
-    slurp
+    hyprshot
+    # grim
+    # slurp
     phinger-cursors
     wl-clipboard
     wl-clip-persist
   ];
+
+  home.sessionVariables = {
+    HYPRSHOT_DIR = "${config.home.homeDirectory}/Pictures/Screenshots";
+  };
 
   services.clipman.enable = true;
 

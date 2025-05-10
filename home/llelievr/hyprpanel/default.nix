@@ -27,6 +27,7 @@ in
       menus.clock.weather.key = secrets.weather.key;
       menus.clock.weather.location = "Rotterdam";
       menus.clock.weather.unit = "metric";
+      notifications.ignore = [ "Spotify" ];
       bar.launcher.icon = "";
       bar.workspaces.showWsIcons = true;
       bar.workspaces.showApplicationIcons = true;

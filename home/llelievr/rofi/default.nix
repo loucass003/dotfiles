@@ -9,6 +9,7 @@
   ];
 
   programs.rofi = {
+    package = pkgs.rofi-wayland;
     enable = true;
     terminal = "${pkgs.kitty}";
     theme = ./theme.rasi;
