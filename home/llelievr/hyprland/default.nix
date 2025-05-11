@@ -15,13 +15,15 @@
     phinger-cursors
     wl-clipboard
     wl-clip-persist
+    cliphist
+    inputs.swww.packages.${pkgs.system}.swww
   ];
 
   home.sessionVariables = {
     HYPRSHOT_DIR = "${config.home.homeDirectory}/Pictures/Screenshots";
   };
 
-  services.clipman.enable = true;
+  # services.clipman.enable = true;
 
   services.dunst = {
     enable = true;
@@ -47,6 +49,7 @@
   wayland.windowManager.hyprland = {
     enable = true;
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+    xwayland.enable = true;
     portalPackage =
       inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
     extraConfig = builtins.readFile ./config/hyprland.conf;
@@ -58,6 +61,11 @@
 
   home.file."${config.home.homeDirectory}/.config/hypr/defaults" = {
     source = ./config/defaults;
+    recursive = true;
+  };
+
+  home.file."${config.home.homeDirectory}/.config/hypr/wallpapers" = {
+    source = ./wallpapers;
     recursive = true;
   };
 

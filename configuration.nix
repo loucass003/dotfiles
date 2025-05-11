@@ -68,7 +68,7 @@
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
 
   security = {
     rtkit.enable = true;
@@ -88,14 +88,6 @@
     #media-session.enable = true;
   };
 
-  xdg.portal = {
-    enable = true;
-    extraPortals = [
-      pkgs.xdg-desktop-portal-gtk
-      pkgs.xdg-desktop-portal-hyprland
-    ];
-  };
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.llelievr = {
     isNormalUser = true;
@@ -105,6 +97,7 @@
       "wheel"
       "audio"
       "docker"
+      "i2c"
     ];
     shell = pkgs.zsh;
   };
@@ -145,7 +138,6 @@
   programs = {
     zsh.enable = true;
     xwayland.enable = true;
-    hyprland.enable = true;
   };
 
   # Allow unfree packages

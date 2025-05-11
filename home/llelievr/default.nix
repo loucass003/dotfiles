@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   pkgs,
   ...
 }:
@@ -42,10 +43,7 @@
 
       # Change Java runtimes available to Prism Launcher
       jdks = [
-        graalvm-ce
-        zulu8
-        zulu17
-        zulu
+        openjdk17
       ];
     })
     google-chrome
@@ -96,7 +94,6 @@
 
     gtk3
     gtk4
-    xdg-desktop-portal-gtk
     xdg-user-dirs
     bottles
 
@@ -125,9 +122,7 @@
 
   programs.vscode = {
     enable = true;
-    userSettings = {
-      # This property will be used to generate settings.json:
-      # https://code.visualstudio.com/docs/getstarted/settings#_settingsjson
+    profiles.default.userSettings = {
       "editor.formatOnSave" = true;
     };
   };
@@ -157,6 +152,15 @@
         "application/x-extension-xhtml" = "google-chrome.desktop";
         "application/x-extension-xht" = "google-chrome.desktop";
       };
+    };
+    portal = {
+      enable = true;
+      config.common.default = "*";
+      extraPortals = [
+        pkgs.xdg-desktop-portal
+        pkgs.xdg-desktop-portal-gtk
+        inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland
+      ];
     };
     userDirs = {
       createDirectories = true;

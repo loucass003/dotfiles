@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   pkgs,
   ...
 }:
@@ -13,5 +14,12 @@
     enable = true;
     terminal = "${pkgs.kitty}";
     theme = ./theme.rasi;
+    plugins = with pkgs; [
+    ];
+  };
+
+  home.file."${config.home.homeDirectory}/.config/rofi/calc.sh" = {
+    source = ./calc.sh;
+    executable = true;
   };
 }
