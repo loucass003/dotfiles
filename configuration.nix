@@ -97,7 +97,6 @@
       "wheel"
       "audio"
       "docker"
-      "i2c"
     ];
     shell = pkgs.zsh;
   };
@@ -137,7 +136,10 @@
 
   programs = {
     zsh.enable = true;
-    xwayland.enable = true;
+    hyprland = {
+      enable = true;
+      xwayland.enable = true;
+    };
   };
 
   # Allow unfree packages

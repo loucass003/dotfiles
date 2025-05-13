@@ -21,7 +21,6 @@
     "usbhid"
     "usb_storage"
     "sd_mod"
-    "i2c-dev"
   ];
   boot.initrd.kernelModules = [ "amdgpu" ];
   boot.kernelModules = [ "kvm-amd" ];
@@ -52,7 +51,6 @@
 
   services.udev.extraRules = ''
     ACTION=="add", SUBSYSTEM=="pci", DRIVER=="pcieport", ATTR{power/wakeup}="disabled"
-    KERNEL=="i2c-[0-9]*", GROUP="i2c", MODE="0660"
   '';
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking

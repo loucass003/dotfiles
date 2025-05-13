@@ -2,9 +2,26 @@
   config,
   inputs,
   pkgs,
+  lib,
   ...
 }:
 
+let
+  enableWayland =
+    drv: bin:
+    drv.overrideAttrs (old: {
+      nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.makeWrapper ];
+      postFixup =
+        (old.postFixup or "")
+        + ''
+          wrapProgram $out/bin/${bin} \
+            --add-flags "--enable-features=UseOzonePlatform" \
+            --add-flags "--ozone-platform=wayland"
+        '';
+    });
+
+  discord = enableWayland pkgs.discord "discord";
+in
 {
   imports = [
     ./shell.nix
@@ -35,7 +52,16 @@
     p7zip
 
     #apps
-    discord
+    (
+      (pkgs.writeShellScriptBin "discord" ''
+        exec ${pkgs.discord}/bin/discord --enable-features=UseOzonePlatform --ozone-platform=wayland
+      '')
+    )
+    (pkgs.makeDesktopItem {
+      name = "discord";
+      exec = "discord";
+      desktopName = "Discord";
+    })
     spotify
     (prismlauncher.override {
       # Add binary required by some mod
@@ -155,6 +181,7 @@
     };
     portal = {
       enable = true;
+      xdgOpenUsePortal = true;
       config.common.default = "*";
       extraPortals = [
         pkgs.xdg-desktop-portal

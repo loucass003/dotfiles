@@ -21,6 +21,11 @@
 
   home.sessionVariables = {
     HYPRSHOT_DIR = "${config.home.homeDirectory}/Pictures/Screenshots";
+    "NIX_AUTO_RUN" = "1";
+    "MOZ_ENABLE_WAYLAND" = "1";
+    "QT_QPA_PLATFORM" = "wayland";
+    "MOZ_ENABLE_XINPUT2" = "1";
+    "MOZ_DISABLE_RDD_SANDBOX" = "1";
   };
 
   # services.clipman.enable = true;
@@ -34,6 +39,7 @@
       picture-uri-dark = "file://${pkgs.nixos-artwork.wallpapers.nineish-dark-gray.src}";
     };
     "org/gnome/desktop/interface" = {
+      gtk-theme = "Adwaita-dark";
       color-scheme = "prefer-dark";
     };
   };
@@ -43,6 +49,20 @@
     theme = {
       name = "Adwaita-dark";
       package = pkgs.gnome-themes-extra;
+    };
+    gtk3 = {
+      extraConfig.gtk-application-prefer-dark-theme = true;
+    };
+    gtk4 = {
+      extraConfig.gtk-application-prefer-dark-theme = true;
+    };
+  };
+
+  qt = {
+    enable = true;
+    platformTheme.name = "gtk3";
+    style = {
+      name = "adwaita-dark";
     };
   };
 
