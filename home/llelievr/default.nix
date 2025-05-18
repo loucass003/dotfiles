@@ -72,7 +72,12 @@ in
         openjdk17
       ];
     })
-    google-chrome
+    (google-chrome.override {
+      commandLineArgs = [
+        "--enable-features=UseOzonePlatform"
+        "--ozone-platform=wayland"
+      ];
+    })
     steam
 
     # utils
@@ -131,7 +136,15 @@ in
     loupe
     file-roller
     gedit
-    plex-desktop
+
+    (plex-desktop.override {
+      extraEnv = {
+        QT_STYLE_OVERRIDE = "default";
+      };
+    })
+
+    jetbrains.idea-community
+    slimevr
   ];
 
   # basic configuration of git, please change to your own

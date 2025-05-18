@@ -21,11 +21,6 @@
 
   home.sessionVariables = {
     HYPRSHOT_DIR = "${config.home.homeDirectory}/Pictures/Screenshots";
-    "NIX_AUTO_RUN" = "1";
-    "MOZ_ENABLE_WAYLAND" = "1";
-    "QT_QPA_PLATFORM" = "wayland";
-    "MOZ_ENABLE_XINPUT2" = "1";
-    "MOZ_DISABLE_RDD_SANDBOX" = "1";
   };
 
   # services.clipman.enable = true;

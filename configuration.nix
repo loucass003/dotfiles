@@ -8,6 +8,7 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware/desktop
+    # ./vm.nix
   ];
 
   nix.settings.experimental-features = [
@@ -37,6 +38,7 @@
       efiSupport = true;
       device = "nodev";
       useOSProber = true;
+      default = "saved";
     };
   };
 
@@ -97,6 +99,7 @@
       "wheel"
       "audio"
       "docker"
+      "dialout"
     ];
     shell = pkgs.zsh;
   };
@@ -174,10 +177,13 @@
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  networking.firewall.allowedTCPPorts = [ 21110 ];
+  networking.firewall.allowedUDPPorts = [
+    35903
+    6969
+    8266
+  ];
+  networking.firewall.enable = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
