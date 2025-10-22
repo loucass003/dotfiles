@@ -12,12 +12,13 @@ let
       nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.makeWrapper ];
       postFixup = (old.postFixup or "") + ''
         wrapProgram $out/bin/${bin} \
-          --add-flags "--enable-features=UseOzonePlatform" \
+          --add-flags "--enable-features=UseOzonePlatform,WaylandWindowDecorations,WaylandPerMonitorScaling" \
           --add-flags "--ozone-platform=wayland"
       '';
     });
 
   discord-wl = enableWayland pkgs.discord "discord";
+  spotify-wl = enableWayland pkgs.spotify "spotify";
 in
 {
 
@@ -69,6 +70,8 @@ in
 
     easyeffects
     pwvucontrol
+    alsa-utils
+    ledfx
 
 
     orca-slicer
@@ -82,7 +85,7 @@ in
       };
     })
     discord-wl
-    spotify
+    spotify-wl
     (prismlauncher.override {
       # Add binary required by some mod
       additionalPrograms = [ ffmpeg ];
@@ -128,4 +131,7 @@ in
       { id = "eimadpbcbfnmbkopoojfekhnkhdbieeh"; }
     ];
   };
+
+  home.sessionVariables.NIXOS_OZONE_WL = "1";
+
 }

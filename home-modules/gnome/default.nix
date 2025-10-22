@@ -2,6 +2,7 @@
   config,
   inputs,
   pkgs,
+  lib,
   ...
 }:
 
@@ -17,6 +18,7 @@
     gtk3
     gtk4
     xdg-user-dirs
+    hicolor-icon-theme
   ];
 
   xdg = {
@@ -63,16 +65,45 @@
   dconf = {
     enable = true;
     settings = {
-      "org/gnome/desktop/interface".color-scheme = "prefer-dark";
+      "org/gnome/desktop/interface" = {
+        color-scheme = "prefer-dark";
+      };
       "org/gnome/shell" = {
         favorite-apps = [
           "brave-browser.desktop"
           "code.desktop"
           "org.gnome.Console.desktop"
           "spotify.desktop"
+          "discord.desktop"
           "org.gnome.Nautilus.desktop"
+        ];
+      };
+      "org/gnome/mutter" = {
+        experimental-features = [
+          "scale-monitor-framebuffer" # Enables fractional scaling (125% 150% 175%)
+          "variable-refresh-rate" # Enables Variable Refresh Rate (VRR) on compatible displays
+          "xwayland-native-scaling" # Scales Xwayland applications to look crisp on HiDPI screens
         ];
       };
     };
   };
+
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Adwaita-dark";
+      package = pkgs.gnome-themes-extra;
+    };
+  };
+
+  qt = {
+    enable = true;
+    platformTheme.name = "Adwaita-dark";
+    style = {
+      name = "Adwaita-dark";
+      package = pkgs.adwaita-qt;
+    };
+  };
+
+  
 }

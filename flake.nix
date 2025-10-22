@@ -14,6 +14,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
     # winboat = {
     #   url = "github:TibixDev/winboat";
     #   inputs.nixpkgs.follows = "nixpkgs";
@@ -88,6 +90,7 @@
         hostname = "llelievr-fw";
         username = "llelievr";
         modules = [
+          inputs.nixos-hardware.nixosModules.framework-16-7040-amd
           ./hardware/laptop/default.nix
           {
             home-manager.users.llelievr = import ./hardware/desktop/home/llelievr/default.nix;

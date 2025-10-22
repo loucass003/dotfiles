@@ -2,7 +2,12 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, hostname, pkgs, ... }:
+{
+  config,
+  hostname,
+  pkgs,
+  ...
+}:
 
 {
 
@@ -24,6 +29,36 @@
       # "libvirtd"
     ];
     shell = pkgs.zsh;
+  };
+
+  boot.kernelModules = [ "snd-aloop" ];
+  services.pipewire = {
+    extraConfig.pipewire = {
+      "10-ledfx-alsa-loopback" = {
+        "context.modules" = [
+          {
+            name = "libpipewire-module-loopback";
+            args = {
+              "audio.position" = [
+                "FL"
+                "FR"
+              ];
+              "capture.props" = {
+                "node.target" = "@DEFAULT_SINK@";
+                "stream.capture.sink" = true;
+                "node.name" = "ledfx_capture";
+              };
+              "playback.props" = {
+                "node.name" = "ledfx_to_alsa";
+                "audio.format" = "S16LE";
+                "audio.rate" = 48000;
+                "target.object" = "alsa_output.platform-snd_aloop.0.analog-stereo";
+              };
+            };
+          }
+        ];
+      };
+    };
   };
 
   # Open ports in the firewall.
