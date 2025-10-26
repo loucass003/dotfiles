@@ -145,6 +145,9 @@
 
   # Use the GNOME Wayland session
   services.xrdp.defaultWindowManager = "${pkgs.gnome-session}/bin/gnome-session";
+  systemd.services.gnome-remote-desktop = {
+    wantedBy = [ "graphical.target" ];
+  };
 
   # XRDP needs the GNOME remote desktop backend to function
   services.gnome.gnome-remote-desktop.enable = true;
