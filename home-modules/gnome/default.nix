@@ -21,6 +21,7 @@
     hicolor-icon-theme
 
     gnomeExtensions.pip-on-top
+    gnomeExtensions.auto-power-profile
   ];
 
   xdg = {
@@ -82,6 +83,7 @@
         disable-user-extensions = false;
         enabled-extensions = with pkgs.gnomeExtensions; [
           pip-on-top.extensionUuid
+          auto-power-profile.extensionUuid
         ];
       };
       "org/gnome/mutter" = {
