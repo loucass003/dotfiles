@@ -19,6 +19,8 @@
     gtk4
     xdg-user-dirs
     hicolor-icon-theme
+
+    gnomeExtensions.pip-on-top
   ];
 
   xdg = {
@@ -77,6 +79,10 @@
           "discord.desktop"
           "org.gnome.Nautilus.desktop"
         ];
+        disable-user-extensions = false;
+        enabled-extensions = with pkgs.gnomeExtensions; [
+          pip-on-top.extensionUuid
+        ];
       };
       "org/gnome/mutter" = {
         experimental-features = [
@@ -105,5 +111,4 @@
     };
   };
 
-  
 }

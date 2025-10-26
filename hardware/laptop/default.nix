@@ -16,6 +16,8 @@
     ./hardware.nix
   ];
 
+  boot.loader.grub.configurationLimit = 40;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.llelievr = {
     isNormalUser = true;
@@ -60,6 +62,9 @@
       };
     };
   };
+
+  networking.firewall.enable = false;
+  networking.enableIPv6 = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
