@@ -24,6 +24,7 @@
   ];
   boot.initrd.kernelModules = [ "amdgpu" ];
   boot.kernelModules = [ "kvm-amd" ];
+  boot.kernelParams = ["amdgpu.sg_display=0"];
   boot.extraModulePackages = [ ];
 
   hardware.graphics = {

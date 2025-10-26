@@ -61,19 +61,6 @@
     };
   };
 
-  # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [
-    21110
-    8080
-    8082
-  ];
-  networking.firewall.allowedUDPPorts = [
-    35903
-    6969
-    8266
-  ];
-  networking.firewall.enable = true;
-
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
