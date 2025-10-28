@@ -22,6 +22,7 @@
 
     gnomeExtensions.pip-on-top
     gnomeExtensions.auto-power-profile
+    gnomeExtensions.appindicator
   ];
 
   xdg = {
@@ -84,6 +85,7 @@
         enabled-extensions = with pkgs.gnomeExtensions; [
           pip-on-top.extensionUuid
           auto-power-profile.extensionUuid
+          appindicator.extensionUuid
         ];
       };
       "org/gnome/mutter" = {

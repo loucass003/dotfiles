@@ -63,6 +63,8 @@
     };
   };
 
+  programs.xwayland.enable = true;
+
   services.gnome.games.enable = false;
 
   # Enable CUPS to print documents.

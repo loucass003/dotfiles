@@ -26,6 +26,7 @@
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
+
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/cdf89972-05d7-4462-a336-36fecc37e946";
     fsType = "ext4";
@@ -68,7 +69,6 @@
     enable32Bit = true;
   };
 
-
   services.pipewire = {
     extraConfig.pipewire = {
       "10-lfe-remixing" = {
@@ -101,4 +101,22 @@
       };
     };
   };
+
+  boot.kernelParams = [
+    # ugreen dock
+    "usbcore.autosuspend=-1"
+    "usbcore.quirks=3188:5335:k"
+  ];
+  boot.extraModprobeConfig = ''
+    # Quirk for UGREEN dock - ignore power requirements
+    options usbcore quirks=3188:5335:k
+  '';
+
+  services.udev.extraRules = ''
+    # UGREEN Dock - disable power checking
+    ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="3188", ATTR{idProduct}=="5335", RUN+="${pkgs.bash}/bin/bash -c 'echo -1 > /sys/module/usbcore/parameters/autosuspend'"
+
+    # UGREEN Dock - For all devices on Bus 5, bypass power checks
+    ACTION=="add", SUBSYSTEM=="usb", ATTRS{busnum}=="5", ATTR{bConfigurationValue}="1"
+  '';
 }

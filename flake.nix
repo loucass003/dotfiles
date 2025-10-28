@@ -93,7 +93,7 @@
           inputs.nixos-hardware.nixosModules.framework-16-7040-amd
           ./hardware/laptop/default.nix
           {
-            home-manager.users.llelievr = import ./hardware/desktop/home/llelievr/default.nix;
+            home-manager.users.llelievr = import ./hardware/laptop/home/llelievr/default.nix;
           }
         ];
       };
