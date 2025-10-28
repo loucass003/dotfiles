@@ -85,7 +85,7 @@ in
       };
     })
     discord-wl
-    spotify-wl
+    spotify
     (prismlauncher.override {
       # Add binary required by some mod
       additionalPrograms = [ ffmpeg ];
@@ -97,6 +97,8 @@ in
       ];
     })
     steam
+
+    proton-pass
 
     jetbrains.idea-community
     slimevr
@@ -132,6 +134,6 @@ in
     ];
   };
 
-  home.sessionVariables.NIXOS_OZONE_WL = "1";
+  # home.sessionVariables.NIXOS_OZONE_WL = "1";
 
 }

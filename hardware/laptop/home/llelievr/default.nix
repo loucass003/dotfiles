@@ -18,7 +18,6 @@ in
     # (modules + /winboat)
     (modules + /winapps)
     (modules + /gnome)
-    (modules + /wallpaper-engine)
   ];
 
   home.username = "llelievr";

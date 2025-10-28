@@ -14,7 +14,6 @@
     file-roller
     gedit
     gnome-tweaks
-    proton-pass
     gtk3
     gtk4
     xdg-user-dirs
