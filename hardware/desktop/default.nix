@@ -6,6 +6,7 @@
   config,
   hostname,
   pkgs,
+  lib,
   modulesPath,
   ...
 }:

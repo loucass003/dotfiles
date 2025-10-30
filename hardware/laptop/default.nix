@@ -6,6 +6,7 @@
   config,
   hostname,
   pkgs,
+  lib,
   modulesPath,
   ...
 }:
@@ -76,38 +77,30 @@
     enable32Bit = true;
   };
 
-  services.pipewire = {
-    extraConfig.pipewire = {
-      "10-lfe-remixing" = {
-        "context.properties" = {
-          "channelmix.normalize" = true;
-          "channelmix.mix-lfe" = true;
-          "channelmix.lfe-cutoff" = 150;
-          "channelmix.upmix" = true;
-          "channelmix.upmix-method" = "psd"; # Passive Surround Decoder
-        };
-      };
-      # "10-buffer-settings" = { MAYBE if CRAKLING
-      #   "context.properties" = {
-      #     "default.clock.rate" = 48000;
-      #     "default.clock.quantum" = 1024; # Larger buffer
-      #     "default.clock.min-quantum" = 512;
-      #     "default.clock.max-quantum" = 2048;
-      #   };
-      # };
-    };
+  # services.pipewire = {
+  #   # extraConfig.pipewire = {
+  #   #   "10-lfe-remixing" = {
+  #   #     "context.properties" = {
+  #   #       "channelmix.normalize" = true;
+  #   #       "channelmix.mix-lfe" = true;
+  #   #       "channelmix.lfe-cutoff" = 150;
+  #   #       "channelmix.upmix" = true;
+  #   #       "channelmix.upmix-method" = "psd"; # Passive Surround Decoder
+  #   #     };
+  #   #   };
+  #   # };
 
-    extraConfig.pipewire-pulse = {
-      "10-lfe-pulse" = {
-        "stream.properties" = {
-          "channelmix.normalize" = true;
-          "channelmix.mix-lfe" = true;
-          "channelmix.lfe-cutoff" = 150;
-          "channelmix.upmix" = true;
-        };
-      };
-    };
-  };
+  #   # extraConfig.pipewire-pulse = {
+  #   #   "10-lfe-pulse" = {
+  #   #     "stream.properties" = {
+  #   #       "channelmix.normalize" = true;
+  #   #       "channelmix.mix-lfe" = true;
+  #   #       "channelmix.lfe-cutoff" = 150;
+  #   #       "channelmix.upmix" = true;
+  #   #     };
+  #   #   };
+  #   # };
+  # };
 
   boot.kernelParams = [
     # ugreen dock

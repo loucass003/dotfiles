@@ -70,6 +70,8 @@ in
 
     easyeffects
     pwvucontrol
+    helvum
+    roomeqwizard
     alsa-utils
     ledfx
 

@@ -80,16 +80,71 @@
 
   services.pipewire = {
     enable = true;
+
+    # Optional but commonly needed:
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
+    jack.enable = true;
 
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
+    # Add the loopback configuration
+    extraConfig.pipewire = {
+      # "10-lfe-remixing" = {
+      #   "context.properties" = {
+      #     "channelmix.normalize" = true;
+      #     "channelmix.mix-lfe" = true;
+      #     "channelmix.lfe-cutoff" = 150;
+      #     "channelmix.upmix" = true;
+      #     "channelmix.upmix-method" = "psd"; # Passive Surround Decoder
+      #   };
+      # };
+      "10-my-loop" = {
+        "context.modules" = [
+          {
+            name = "libpipewire-module-loopback";
+            args = {
+              "audio.position" = [
+                "FL"
+                "FR"
+              ];
+              "capture.props" = {
+                "media.class" = "Audio/Sink";
+                "node.name" = "myloop";
+                "node.description" = "MyLoop";
+              };
+              "playback.props" = {
+                "node.name" = "myloop_playback";
+                "node.description" = "MyLoop_Playback";
+                "node.target" = "@DEFAULT_AUDIO_SINK@";
+                "audio.position" = [
+                  "FL"
+                  "FR"
+                  "LFE"
+                ];
+                "audio.rate" = 48000;
+                # Add LFE mixing properties here
+                "channelmix.normalize" = false;
+                "channelmix.mix-lfe" = true;
+                "channelmix.lfe-cutoff" = 150;
+                "channelmix.upmix" = true;
+              };
+            };
+          }
+        ];
+      };
+    };
+    # extraConfig.pipewire-pulse = { 
+    #   "10-lfe-pulse" = {
+    #     "stream.properties" = {
+    #       "channelmix.normalize" = true;
+    #       "channelmix.mix-lfe" = true;
+    #       "channelmix.lfe-cutoff" = 150;
+    #       "channelmix.upmix" = true;
+    #     };
+    #   };
+    # };
   };
+
 
   virtualisation = {
     docker = {
