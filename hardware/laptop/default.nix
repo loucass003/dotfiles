@@ -6,15 +6,130 @@
   config,
   hostname,
   pkgs,
+  modulesPath,
   ...
 }:
 
 {
 
   imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
     ../config-commons.nix
-    ./hardware.nix
   ];
+
+  boot.initrd.availableKernelModules = [
+    "nvme"
+    "xhci_pci"
+    "thunderbolt"
+    "usbhid"
+    "usb_storage"
+    "sd_mod"
+  ];
+  boot.initrd.kernelModules = [
+    "amdgpu"
+    "v4l2loopback"
+  ];
+  boot.kernelModules = [ "kvm-amd" ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [
+    v4l2loopback
+  ];
+
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/cdf89972-05d7-4462-a336-36fecc37e946";
+    fsType = "ext4";
+  };
+
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/C682-FA68";
+    fsType = "vfat";
+    options = [
+      "fmask=0077"
+      "dmask=0077"
+    ];
+  };
+
+  swapDevices = [ ];
+
+  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
+  # (the default) this is the recommended approach. When using systemd-networkd it's
+  # still possible to use this option, but it's recommended to use it in conjunction
+  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
+  networking.useDHCP = lib.mkDefault true;
+  # networking.interfaces.eth0.useDHCP = lib.mkDefault true;
+  # networking.interfaces.wlp1s0.useDHCP = lib.mkDefault true;
+
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
+  services.xserver = {
+    enable = true;
+    videoDrivers = [ "amdgpu" ];
+    # desktopManager.gnome.enable = true;
+    xkb = {
+      layout = "us";
+      variant = "";
+    };
+  };
+
+  hardware.graphics = {
+    ## radv: an open-source Vulkan driver from freedesktop
+    enable32Bit = true;
+  };
+
+  services.pipewire = {
+    extraConfig.pipewire = {
+      "10-lfe-remixing" = {
+        "context.properties" = {
+          "channelmix.normalize" = true;
+          "channelmix.mix-lfe" = true;
+          "channelmix.lfe-cutoff" = 150;
+          "channelmix.upmix" = true;
+          "channelmix.upmix-method" = "psd"; # Passive Surround Decoder
+        };
+      };
+      # "10-buffer-settings" = { MAYBE if CRAKLING
+      #   "context.properties" = {
+      #     "default.clock.rate" = 48000;
+      #     "default.clock.quantum" = 1024; # Larger buffer
+      #     "default.clock.min-quantum" = 512;
+      #     "default.clock.max-quantum" = 2048;
+      #   };
+      # };
+    };
+
+    extraConfig.pipewire-pulse = {
+      "10-lfe-pulse" = {
+        "stream.properties" = {
+          "channelmix.normalize" = true;
+          "channelmix.mix-lfe" = true;
+          "channelmix.lfe-cutoff" = 150;
+          "channelmix.upmix" = true;
+        };
+      };
+    };
+  };
+
+  boot.kernelParams = [
+    # ugreen dock
+    "usbcore.autosuspend=-1"
+    "usbcore.quirks=3188:5335:k"
+  ];
+  boot.extraModprobeConfig = ''
+    # Quirk for UGREEN dock - ignore power requirements
+    options usbcore quirks=3188:5335:k
+
+    options v4l2loopback devices=1 video_nr=1 card_label="OBS Cam" exclusive_caps=1
+
+    options quirks=0x100 trace=1
+  '';
+
+  services.udev.extraRules = ''
+    # UGREEN Dock - disable power checking
+    ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="3188", ATTR{idProduct}=="5335", RUN+="${pkgs.bash}/bin/bash -c 'echo -1 > /sys/module/usbcore/parameters/autosuspend'"
+
+    # UGREEN Dock - For all devices on Bus 5, bypass power checks
+    ACTION=="add", SUBSYSTEM=="usb", ATTRS{busnum}=="5", ATTR{bConfigurationValue}="1"
+  '';
 
   boot.loader.grub.configurationLimit = 40;
 
@@ -31,36 +146,6 @@
       # "libvirtd"
     ];
     shell = pkgs.zsh;
-  };
-
-  boot.kernelModules = [ "snd-aloop" ];
-  services.pipewire = {
-    extraConfig.pipewire = {
-      "10-ledfx-alsa-loopback" = {
-        "context.modules" = [
-          {
-            name = "libpipewire-module-loopback";
-            args = {
-              "audio.position" = [
-                "FL"
-                "FR"
-              ];
-              "capture.props" = {
-                "node.target" = "@DEFAULT_SINK@";
-                "stream.capture.sink" = true;
-                "node.name" = "ledfx_capture";
-              };
-              "playback.props" = {
-                "node.name" = "ledfx_to_alsa";
-                "audio.format" = "S16LE";
-                "audio.rate" = 48000;
-                "target.object" = "alsa_output.platform-snd_aloop.0.analog-stereo";
-              };
-            };
-          }
-        ];
-      };
-    };
   };
 
   networking.firewall.enable = false;

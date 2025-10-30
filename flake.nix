@@ -4,6 +4,10 @@
   inputs = {
     self.submodules = true;
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
+    
+    distroav.url = "path:./distroav";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -26,6 +30,7 @@
     {
       self,
       nixpkgs,
+      nixpkgs-stable,
       home-manager,
       ...
     }@inputs:
@@ -34,11 +39,13 @@
       nixpkgsWithOverlays = with inputs; rec {
         config = {
           allowUnfree = true;
-          permittedInsecurePackages = [
-            # FIXME:: add any insecure packages you absolutely need here
-          ];
         };
         overlays = [];
+      };
+
+      mkPkgsStable = system: import nixpkgs-stable {
+        inherit system;
+        config.allowUnfree = true;
       };
 
       configurationDefaults = args: {
@@ -49,13 +56,6 @@
         home-manager.extraSpecialArgs = args;
       };
 
-      argDefaults = {
-        inherit inputs;
-        channels = {
-          inherit nixpkgs;
-        };
-      };
-
       mkNixosConfiguration = {
         system ? "x86_64-linux",
         hostname,
@@ -63,7 +63,14 @@
         args ? {},
         modules,
       }: let
-        specialArgs = argDefaults // {inherit hostname username;} // args;
+        pkgs-stable = mkPkgsStable system;
+        specialArgs = {
+          inherit inputs hostname username pkgs-stable;
+          channels = {
+            inherit nixpkgs;
+            nixpkgs-stable = pkgs-stable;
+          };
+        } // args;
       in
         nixpkgs.lib.nixosSystem {
           inherit system specialArgs;

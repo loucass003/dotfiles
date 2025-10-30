@@ -1,6 +1,7 @@
 {
   config,
   inputs,
+  channels,
   pkgs,
   ...
 }:
@@ -49,7 +50,6 @@ in
     nix-output-monitor
     nixfmt-rfc-style
 
-
     htop
     btop # replacement of htop/nmon
     iotop # io monitoring
@@ -72,7 +72,6 @@ in
     pwvucontrol
     alsa-utils
     ledfx
-
 
     orca-slicer
     bottles
@@ -103,6 +102,14 @@ in
     jetbrains.idea-community
     slimevr
   ];
+
+  programs.obs-studio = {
+    enable = true;
+    plugins = with channels.nixpkgs-stable.obs-studio-plugins; [
+      # obs-ndi
+      # inputs.distroav.packages.${pkgs.system}.distroav
+    ];
+  };
 
   # basic configuration of git, please change to your own
   programs.git = {
