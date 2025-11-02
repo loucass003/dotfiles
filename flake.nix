@@ -59,13 +59,12 @@
       mkNixosConfiguration = {
         system ? "x86_64-linux",
         hostname,
-        username,
         args ? {},
         modules,
       }: let
         pkgs-stable = mkPkgsStable system;
         specialArgs = {
-          inherit inputs hostname username pkgs-stable;
+          inherit inputs hostname pkgs-stable;
           channels = {
             inherit nixpkgs;
             nixpkgs-stable = pkgs-stable;
@@ -84,7 +83,6 @@
     in {
       nixosConfigurations.desktop = mkNixosConfiguration {
         hostname = "llelievr-desktop";
-        username = "llelievr";
         modules = [
           ./hardware/desktop/default.nix
           {
@@ -95,7 +93,6 @@
 
       nixosConfigurations.laptop = mkNixosConfiguration {
         hostname = "llelievr-fw";
-        username = "llelievr";
         modules = [
           inputs.nixos-hardware.nixosModules.framework-16-7040-amd
           ./hardware/laptop/default.nix
