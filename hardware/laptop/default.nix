@@ -77,31 +77,6 @@
     enable32Bit = true;
   };
 
-  # services.pipewire = {
-  #   # extraConfig.pipewire = {
-  #   #   "10-lfe-remixing" = {
-  #   #     "context.properties" = {
-  #   #       "channelmix.normalize" = true;
-  #   #       "channelmix.mix-lfe" = true;
-  #   #       "channelmix.lfe-cutoff" = 150;
-  #   #       "channelmix.upmix" = true;
-  #   #       "channelmix.upmix-method" = "psd"; # Passive Surround Decoder
-  #   #     };
-  #   #   };
-  #   # };
-
-  #   # extraConfig.pipewire-pulse = {
-  #   #   "10-lfe-pulse" = {
-  #   #     "stream.properties" = {
-  #   #       "channelmix.normalize" = true;
-  #   #       "channelmix.mix-lfe" = true;
-  #   #       "channelmix.lfe-cutoff" = 150;
-  #   #       "channelmix.upmix" = true;
-  #   #     };
-  #   #   };
-  #   # };
-  # };
-
   boot.kernelParams = [
     # ugreen dock
     "usbcore.autosuspend=-1"

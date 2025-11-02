@@ -89,15 +89,6 @@
 
     # Add the loopback configuration
     extraConfig.pipewire = {
-      # "10-lfe-remixing" = {
-      #   "context.properties" = {
-      #     "channelmix.normalize" = true;
-      #     "channelmix.mix-lfe" = true;
-      #     "channelmix.lfe-cutoff" = 150;
-      #     "channelmix.upmix" = true;
-      #     "channelmix.upmix-method" = "psd"; # Passive Surround Decoder
-      #   };
-      # };
       "10-my-loop" = {
         "context.modules" = [
           {
@@ -133,16 +124,6 @@
         ];
       };
     };
-    # extraConfig.pipewire-pulse = { 
-    #   "10-lfe-pulse" = {
-    #     "stream.properties" = {
-    #       "channelmix.normalize" = true;
-    #       "channelmix.mix-lfe" = true;
-    #       "channelmix.lfe-cutoff" = 150;
-    #       "channelmix.upmix" = true;
-    #     };
-    #   };
-    # };
   };
 
 

@@ -13,10 +13,7 @@ in
   imports = [
     (modules + /commons.nix)
     (modules + /shell.nix)
-    # (modules + /ssh)
     (modules + /ulauncher)
-    # (modules + /winboat)
-    (modules + /winapps)
     (modules + /gnome)
   ];
 
