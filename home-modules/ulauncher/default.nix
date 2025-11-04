@@ -13,15 +13,14 @@
   # Configure GNOME keyboard shortcut for ulauncher
   dconf.settings = {
     "org/gnome/desktop/wm/keybindings" = {
-      activate-window-menu = [];
+      activate-window-menu = [ ];
     };
     "org/gnome/settings-daemon/plugins/media-keys" = {
       custom-keybindings = [
-        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
+        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/ulauncher/"
       ];
     };
-    
-    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/ulauncher" = {
       binding = "<Alt>space";
       command = "${pkgs.ulauncher}/bin/ulauncher-toggle";
       name = "Ulauncher";

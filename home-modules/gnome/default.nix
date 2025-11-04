@@ -18,6 +18,8 @@
     gtk4
     xdg-user-dirs
     hicolor-icon-theme
+    gjs
+    glib
 
     gnomeExtensions.pip-on-top
     gnomeExtensions.auto-power-profile
@@ -68,6 +70,9 @@
   dconf = {
     enable = true;
     settings = {
+      "org/gnome/shell/keybindings" = {
+        show-screenshot-ui = [ "Print" ];
+      };
       "org/gnome/desktop/interface" = {
         color-scheme = "prefer-dark";
       };
