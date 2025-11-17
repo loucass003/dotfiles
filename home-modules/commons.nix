@@ -103,6 +103,8 @@ in
 
     jetbrains.idea-community
     slimevr
+
+    direnv
   ];
 
   programs.obs-studio = {
