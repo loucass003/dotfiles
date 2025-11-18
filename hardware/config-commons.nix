@@ -20,10 +20,12 @@
     substituters = [
       "https://cache.nixos.org"
       "https://nix-community.cachix.org"
+      "https://cache.garnix.io"
     ];
     trusted-public-keys = [
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
     ];
   };
 
@@ -126,7 +128,6 @@
     };
   };
 
-
   virtualisation = {
     docker = {
       enable = true;
@@ -179,19 +180,19 @@
 
   services.teamviewer.enable = true;
 
-  services.xrdp.enable = true;
+  # services.xrdp.enable = true;
 
   # Use the GNOME Wayland session
-  services.xrdp.defaultWindowManager = "${pkgs.gnome-session}/bin/gnome-session";
-  systemd.services.gnome-remote-desktop = {
-    wantedBy = [ "graphical.target" ];
-  };
+  # services.xrdp.defaultWindowManager = "${pkgs.gnome-session}/bin/gnome-session";
+  # systemd.services.gnome-remote-desktop = {
+  # wantedBy = [ "graphical.target" ];
+  # };
 
   # XRDP needs the GNOME remote desktop backend to function
-  services.gnome.gnome-remote-desktop.enable = true;
+  # services.gnome.gnome-remote-desktop.enable = true;
 
   # Open the default RDP port (3389)
-  services.xrdp.openFirewall = true;
+  # services.xrdp.openFirewall = true;
 
   # Disable autologin to avoid session conflicts
   services.displayManager.autoLogin.enable = false;

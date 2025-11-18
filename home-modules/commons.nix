@@ -77,7 +77,9 @@ in
 
     orca-slicer
     bottles
-    lutris
+    sidequest
+    bambu-studio
+    # lutris
     parsec-bin
     blender
     (plex-desktop.override {
@@ -105,6 +107,7 @@ in
     slimevr
 
     direnv
+    inputs.affinity-nix.packages.${pkgs.system}.v3
   ];
 
   programs.obs-studio = {
