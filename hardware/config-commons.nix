@@ -10,7 +10,6 @@
 }:
 
 {
-
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
@@ -52,22 +51,7 @@
   time.timeZone = "Europe/Amsterdam";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  services.displayManager = {
-    gdm = {
-      enable = true;
-      wayland = true;
-    };
-  };
-
-  services.desktopManager = {
-    gnome = {
-      enable = true;
-    };
-  };
-
   programs.xwayland.enable = true;
-
-  services.gnome.games.enable = false;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -137,22 +121,6 @@
     };
   };
 
-  systemd = {
-    user.services.polkit-gnome-authentication-agent-1 = {
-      description = "polkit-gnome-authentication-agent-1";
-      wantedBy = [ "graphical-session.target" ];
-      wants = [ "graphical-session.target" ];
-      after = [ "graphical-session.target" ];
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-        Restart = "on-failure";
-        RestartSec = 1;
-        TimeoutStopSec = 10;
-      };
-    };
-  };
-
   programs = {
     zsh.enable = true;
   };
@@ -180,19 +148,14 @@
 
   services.teamviewer.enable = true;
 
-  # services.xrdp.enable = true;
+  services.udev.extraRules = ''
+    ## SlimeVR
+    # smol slime dongle
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="7690", MODE="0660", GROUP="dialout"
 
-  # Use the GNOME Wayland session
-  # services.xrdp.defaultWindowManager = "${pkgs.gnome-session}/bin/gnome-session";
-  # systemd.services.gnome-remote-desktop = {
-  # wantedBy = [ "graphical.target" ];
-  # };
-
-  # XRDP needs the GNOME remote desktop backend to function
-  # services.gnome.gnome-remote-desktop.enable = true;
-
-  # Open the default RDP port (3389)
-  # services.xrdp.openFirewall = true;
+    # This is for the USB device itself
+    SUBSYSTEM=="usb", ATTR{idVendor}=="1209", ATTR{idProduct}=="7690", MODE="0660", GROUP="dialout"
+  '';
 
   # Disable autologin to avoid session conflicts
   services.displayManager.autoLogin.enable = false;

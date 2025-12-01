@@ -16,6 +16,8 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     ../config-commons.nix
+    # ../../nixos/gnome
+    ../../nixos/kde
   ];
 
   boot.initrd.availableKernelModules = [

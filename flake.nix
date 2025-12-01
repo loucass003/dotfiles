@@ -16,6 +16,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
+
+    # hyprland.url = "github:hyprwm/Hyprland";
+    # nix-colors.url = "github:misterio77/nix-colors";
+
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     affinity-nix.url = "github:mrshmllow/affinity-nix";
@@ -30,6 +39,7 @@
       self,
       nixpkgs,
       nixpkgs-stable,
+      plasma-manager,
       home-manager,
       ...
     }@inputs:
@@ -55,6 +65,7 @@
         home-manager.useUserPackages = true;
         home-manager.backupFileExtension = "hm-backup";
         home-manager.extraSpecialArgs = args;
+        home-manager.sharedModules = [ plasma-manager.homeModules.plasma-manager ];
       };
 
       mkNixosConfiguration =

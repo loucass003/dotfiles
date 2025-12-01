@@ -10,11 +10,13 @@ let
   modules = ../../../../home-modules;
 in
 {
+
   imports = [
     (modules + /commons.nix)
     (modules + /shell.nix)
-    (modules + /ulauncher)
-    (modules + /gnome)
+    # (modules + /ulauncher)
+    # (modules + /gnome)
+    (modules + /kde)
   ];
 
   home.username = "llelievr";

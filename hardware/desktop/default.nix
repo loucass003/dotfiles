@@ -16,6 +16,8 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     ../config-commons.nix
+    # ../../nixos/gnome
+    ../../nixos/kde
   ];
 
   boot.initrd.availableKernelModules = [
@@ -85,7 +87,6 @@
   services.xserver = {
     enable = true;
     videoDrivers = [ "amdgpu" ];
-    # desktopManager.gnome.enable = true;
     xkb = {
       layout = "us";
       variant = "";

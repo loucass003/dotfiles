@@ -108,6 +108,8 @@ in
 
     direnv
     inputs.affinity-nix.packages.${pkgs.system}.v3
+
+    ghostty
   ];
 
   programs.obs-studio = {

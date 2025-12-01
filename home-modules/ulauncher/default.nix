@@ -1,7 +1,9 @@
 {
   config,
+  osConfig,
   inputs,
   pkgs,
+  lib,
   ...
 }:
 
@@ -11,7 +13,7 @@
   ];
 
   # Configure GNOME keyboard shortcut for ulauncher
-  dconf.settings = {
+  dconf.settings = lib.mkIf (osConfig.services.desktopManager.gnome.enable) {
     "org/gnome/desktop/wm/keybindings" = {
       activate-window-menu = [ ];
     };
