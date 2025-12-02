@@ -22,9 +22,6 @@
       inputs.home-manager.follows = "home-manager";
     };
 
-    # hyprland.url = "github:hyprwm/Hyprland";
-    # nix-colors.url = "github:misterio77/nix-colors";
-
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     affinity-nix.url = "github:mrshmllow/affinity-nix";

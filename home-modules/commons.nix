@@ -103,13 +103,15 @@ in
 
     proton-pass
 
-    jetbrains.idea-community
+    jetbrains.idea-community-bin
     slimevr
 
     direnv
     inputs.affinity-nix.packages.${pkgs.system}.v3
 
     ghostty
+    # davinci-resolve
+    kdePackages.kdenlive
   ];
 
   programs.obs-studio = {
