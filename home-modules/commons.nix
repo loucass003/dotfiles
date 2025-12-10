@@ -112,6 +112,8 @@ in
     ghostty
     # davinci-resolve
     kdePackages.kdenlive
+
+    rpi-imager
   ];
 
   programs.obs-studio = {
