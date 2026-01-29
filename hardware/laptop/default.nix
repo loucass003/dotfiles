@@ -31,8 +31,21 @@
   boot.initrd.kernelModules = [
     "amdgpu"
     "v4l2loopback"
+    "thunderbolt"
+    "nvidia"
   ];
-  boot.kernelModules = [ "kvm-amd" ];
+  boot.kernelModules = [ 
+    "kvm-amd" 
+    "thunderbolt"
+    "nvidia"
+    "nvidia_modeset"
+    "nvidia_uvm"
+    "nvidia_drm"
+  ];
+
+  services.hardware.bolt.enable = true;
+
+
   boot.extraModulePackages = with config.boot.kernelPackages; [
     v4l2loopback
   ];
@@ -43,7 +56,7 @@
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/C682-FA68";
+    device = "/dev/disk/by-uuid/1597-E473";
     fsType = "vfat";
     options = [
       "fmask=0077"
@@ -68,7 +81,7 @@
 
   services.xserver = {
     enable = true;
-    videoDrivers = [ "amdgpu" ];
+    videoDrivers = [ "amdgpu" "nvidia" ];
     # desktopManager.gnome.enable = true;
     xkb = {
       layout = "us";
@@ -82,8 +95,25 @@
     enable = true;
     extraPackages = with pkgs; [
       rocmPackages.clr.icd
+      nvidia-vaapi-driver
     ];
   };
+
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagement.enable = true;
+    powerManagement.finegrained = false;
+    open = false;
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+
+  };
+
+  hardware.nvidia.prime = {
+	    allowExternalGpu = true;
+  };
+	    
+	services.thermald.enable = true;
 
   boot.kernelParams = [
     # ugreen dock

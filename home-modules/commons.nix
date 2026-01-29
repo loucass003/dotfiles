@@ -103,7 +103,7 @@ in
 
     proton-pass
 
-    jetbrains.idea-community-bin
+    jetbrains.idea-oss
     slimevr
 
     direnv
@@ -114,6 +114,9 @@ in
     kdePackages.kdenlive
 
     rpi-imager
+
+    protonvpn-gui
+    gimp
   ];
 
   programs.obs-studio = {

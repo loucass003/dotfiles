@@ -112,6 +112,19 @@
     };
   };
 
+  services.pipewire.extraConfig.pipewire."99-balanced" = {
+    context.properties = {
+      default.clock.rate = 48000;
+      default.clock.quantum = 768;
+      default.clock.min-quantum = 512;
+      default.clock.max-quantum = 1536;
+    };
+  };
+
+  services.pipewire.extraConfig.pipewire-pulse."99-pulse" = {
+    pulse.properties.flat.volumes = false;
+  };
+  
   virtualisation = {
     docker = {
       enable = true;
