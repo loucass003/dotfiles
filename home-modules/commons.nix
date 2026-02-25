@@ -48,7 +48,7 @@ in
 
     # nix related
     nix-output-monitor
-    nixfmt-rfc-style
+    nixfmt
 
     htop
     btop # replacement of htop/nmon
@@ -103,7 +103,8 @@ in
 
     proton-pass
 
-    jetbrains.idea-oss
+    # jetbrains.idea-oss
+    jetbrains.idea
     slimevr
 
     direnv
@@ -117,6 +118,11 @@ in
 
     protonvpn-gui
     gimp
+
+    vlc
+    claude-code
+
+    mixxx
   ];
 
   programs.obs-studio = {
@@ -131,8 +137,10 @@ in
   programs.git = {
     enable = true;
     lfs.enable = true;
-    userName = "loucass003";
-    userEmail = "loucass003@gmail.com";
+    settings.user = {
+      email = "loucass003@gmail.com";
+      name = "loucass003";
+    };
     extraConfig = {
       init.defaultBranch = "main";
       push.autoSetupRemote = true;

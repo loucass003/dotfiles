@@ -109,28 +109,21 @@
 
   };
 
+  # systemd.services.nvidia-suspend.enable = true;
+  # systemd.services.nvidia-resume.enable = true;
+  # systemd.services.nvidia-hibernate.enable = true;
+
   hardware.nvidia.prime = {
-	    allowExternalGpu = true;
+    allowExternalGpu = true;
   };
 	    
 	services.thermald.enable = true;
 
   boot.kernelParams = [
-    # ugreen dock
     "usbcore.autosuspend=-1"
     "usbcore.quirks=3188:5335:k"
+    # "pcie_aspm=off"
   ];
-
-  # boot.kernelPatches = [
-  #   {
-  #     name = "amdgpu-ignore-ctx-privileges";
-  #     patch = pkgs.fetchpatch {
-  #       name = "cap_sys_nice_begone.patch";
-  #       url = "https://github.com/Frogging-Family/community-patches/raw/master/linux61-tkg/cap_sys_nice_begone.mypatch";
-  #       hash = "sha256-Y3a0+x2xvHsfLax/uwycdJf3xLxvVfkfDVqjkxNaYEo=";
-  #     };
-  #   }
-  # ];
 
   boot.extraModprobeConfig = ''
     # Quirk for UGREEN dock - ignore power requirements
@@ -147,7 +140,69 @@
 
     # UGREEN Dock - For all devices on Bus 5, bypass power checks
     ACTION=="add", SUBSYSTEM=="usb", ATTRS{busnum}=="5", ATTR{bConfigurationValue}="1"
+
+    # UGREEN Dock - Improved power management matching (replacing the Bus 5 rule)
+    # Matches the Fresco Logic hub inside your dock specifically
+    ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="1d5c", ATTRS{idProduct}=="5801", ATTR{bConfigurationValue}="1"
+
+
+    # When NVIDIA eGPU is removed - only trigger on Thunderbolt PCI devices
+    ACTION=="remove", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", SUBSYSTEMS=="thunderbolt", RUN+="${pkgs.systemd}/bin/systemctl start nvidia-egpu-remove.service"
+
+    # When NVIDIA eGPU is added - only trigger on Thunderbolt PCI devices
+    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", SUBSYSTEMS=="thunderbolt", RUN+="${pkgs.systemd}/bin/systemctl start nvidia-egpu-add.service"
   '';
+
+  systemd.services.nvidia-egpu-remove = {
+    description = "Handle NVIDIA eGPU removal";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = pkgs.writeShellScript "nvidia-egpu-remove" ''
+        # Kill any processes using the NVIDIA GPU (optional but helps)
+        ${pkgs.lsof}/bin/lsof /dev/nvidia* 2>/dev/null | ${pkgs.gawk}/bin/awk 'NR>1 {print $2}' | ${pkgs.findutils}/bin/xargs -r kill -9 2>/dev/null || true
+        
+        # Unbind all NVIDIA devices
+        for dev in /sys/bus/pci/drivers/nvidia/*; do
+          if [ -e "$dev/remove" ]; then
+            echo 1 > "$dev/remove" 2>/dev/null || true
+          fi
+        done
+        
+        # Wait a bit
+        sleep 1
+        
+        # Try to unload modules (may fail, that's ok)
+        ${pkgs.kmod}/bin/modprobe -r nvidia_drm 2>/dev/null || true
+        ${pkgs.kmod}/bin/modprobe -r nvidia_modeset 2>/dev/null || true
+        ${pkgs.kmod}/bin/modprobe -r nvidia_uvm 2>/dev/null || true
+        ${pkgs.kmod}/bin/modprobe -r nvidia 2>/dev/null || true
+      '';
+    };
+  };
+
+  systemd.services.nvidia-egpu-add = {
+    description = "Handle NVIDIA eGPU connection";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = pkgs.writeShellScript "nvidia-egpu-add" ''
+        # Wait for device to stabilize
+        sleep 2
+        
+        # Rescan PCI bus to ensure device is detected
+        echo 1 > /sys/bus/pci/rescan 2>/dev/null || true
+        
+        # Load NVIDIA modules
+        ${pkgs.kmod}/bin/modprobe nvidia
+        ${pkgs.kmod}/bin/modprobe nvidia_modeset
+        ${pkgs.kmod}/bin/modprobe nvidia_uvm
+        ${pkgs.kmod}/bin/modprobe nvidia_drm
+        
+        # Create device nodes
+        ${pkgs.kmod}/bin/modprobe -r nvidia_drm nvidia_modeset nvidia_uvm nvidia 2>/dev/null || true
+        ${pkgs.kmod}/bin/modprobe nvidia nvidia_modeset nvidia_uvm nvidia_drm
+      '';
+    };
+  };
 
   boot.loader.grub.configurationLimit = 40;
 

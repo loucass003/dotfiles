@@ -163,11 +163,8 @@
 
   services.udev.extraRules = ''
     ## SlimeVR
-    # smol slime dongle
-    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="7690", MODE="0660", GROUP="dialout"
-
-    # This is for the USB device itself
-    SUBSYSTEM=="usb", ATTR{idVendor}=="1209", ATTR{idProduct}=="7690", MODE="0660", GROUP="dialout"
+    SUBSYSTEM=="usb", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="7690", MODE="0660", TAG+="uaccess"
+    SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="7690", MODE="0660", TAG+="uaccess"
   '';
 
   # Disable autologin to avoid session conflicts
