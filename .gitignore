@@ -1,0 +1,19 @@
+# Age private keys
+keys.txt
+*.age
+
+# SSH private keys
+id_rsa
+id_ed25519
+id_ecdsa
+*.pem
+*.key
+
+# Environment files
+.env
+.env.*
+
+# secrets/ yaml files can't be distinguished from encrypted ones by name.
+# Make sure to always run: sops --encrypt --in-place secrets/*.yaml
+# before staging. Unencrypted sops files contain plaintext values,
+# encrypted ones contain "sops:" metadata at the bottom.

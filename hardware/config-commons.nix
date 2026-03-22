@@ -10,6 +10,10 @@
 }:
 
 {
+  # sops-nix: use each machine's SSH host key for runtime secret decryption.
+  # Your personal age key (from .sops.yaml) is used when editing secrets.
+  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
@@ -124,7 +128,7 @@
   services.pipewire.extraConfig.pipewire-pulse."99-pulse" = {
     pulse.properties.flat.volumes = false;
   };
-  
+
   virtualisation = {
     docker = {
       enable = true;
@@ -151,6 +155,13 @@
     ethtool
   ];
 
+  fonts.enableDefaultPackages = true;
+  fonts.packages = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-color-emoji
+  ];
+
   environment.shells = with pkgs; [
     zsh
   ];
@@ -173,6 +184,8 @@
   # Disable autologin to avoid session conflicts
   services.displayManager.autoLogin.enable = false;
   services.getty.autologinUser = null;
+
+  programs.ssh.startAgent = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

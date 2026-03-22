@@ -6,6 +6,8 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
 
+    hytale-launcher.url = "github:JPyke3/hytale-launcher-nix";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -23,6 +25,11 @@
     };
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     affinity-nix.url = "github:mrshmllow/affinity-nix";
     # winboat = {
@@ -86,6 +93,7 @@
         nixpkgs.lib.nixosSystem {
           inherit system specialArgs;
           modules = [
+            inputs.sops-nix.nixosModules.sops
             (configurationDefaults specialArgs)
             home-manager.nixosModules.home-manager
           ]
