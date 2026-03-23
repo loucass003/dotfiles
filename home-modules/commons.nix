@@ -50,6 +50,11 @@ in
     nix-output-monitor
     nixfmt
 
+    # secrets management
+    sops
+    age
+    ssh-to-age
+
     htop
     btop # replacement of htop/nmon
     iotop # io monitoring
@@ -70,7 +75,7 @@ in
 
     easyeffects
     pwvucontrol
-    helvum
+    # helvum
     roomeqwizard
     alsa-utils
     ledfx
@@ -103,12 +108,14 @@ in
 
     proton-pass
 
-    # jetbrains.idea-oss
     jetbrains.idea
+    jetbrains.datagrip
     slimevr
 
     direnv
     inputs.affinity-nix.packages.${pkgs.system}.v3
+
+    inputs.hytale-launcher.packages.x86_64-linux.default
 
     ghostty
     # davinci-resolve
@@ -118,11 +125,11 @@ in
 
     protonvpn-gui
     gimp
-
     vlc
-    claude-code
-
     mixxx
+    steam-run
+    claude-code
+    obsidian
   ];
 
   programs.obs-studio = {

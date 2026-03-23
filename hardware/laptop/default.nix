@@ -18,6 +18,7 @@
     ../config-commons.nix
     # ../../nixos/gnome
     ../../nixos/kde
+    ../../nixos/webdav.nix
   ];
 
   boot.initrd.availableKernelModules = [
