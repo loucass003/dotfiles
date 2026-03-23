@@ -27,6 +27,7 @@ in
   home.packages = with pkgs; [
     oh-my-zsh
     nerd-fonts.fira-code
+    source-han-sans
 
     # archives
     zip
@@ -75,7 +76,11 @@ in
 
     easyeffects
     pwvucontrol
+<<<<<<< Updated upstream
     # helvum
+=======
+    crosspipe
+>>>>>>> Stashed changes
     roomeqwizard
     alsa-utils
     ledfx
@@ -130,6 +135,8 @@ in
     steam-run
     claude-code
     obsidian
+    winboat
+    realvnc-vnc-viewer
   ];
 
   programs.obs-studio = {
@@ -169,7 +176,4 @@ in
       { id = "eimadpbcbfnmbkopoojfekhnkhdbieeh"; }
     ];
   };
-
-  # home.sessionVariables.NIXOS_OZONE_WL = "1";
-
 }

@@ -79,7 +79,7 @@
 
     # Add the loopback configuration
     extraConfig.pipewire = {
-      "10-my-loop" = {
+      "10-my-loop-2" = {
         "context.modules" = [
           {
             name = "libpipewire-module-loopback";

@@ -4,7 +4,7 @@
   inputs = {
     self.submodules = true;
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
 
     hytale-launcher.url = "github:JPyke3/hytale-launcher-nix";
 
@@ -13,10 +13,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    winapps = {
-      url = "github:winapps-org/winapps";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # winapps = {
+    #   url = "github:winapps-org/winapps";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
@@ -32,6 +32,7 @@
     };
 
     affinity-nix.url = "github:mrshmllow/affinity-nix";
+
     # winboat = {
     #   url = "github:TibixDev/winboat";
     #   inputs.nixpkgs.follows = "nixpkgs";
