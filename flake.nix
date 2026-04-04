@@ -32,6 +32,11 @@
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    niri-flake = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -81,6 +86,7 @@
       nixosConfigurations.desktop = mkNixosConfiguration {
         hostname = "llelievr-desktop";
         modules = [
+          inputs.niri-flake.nixosModules.niri
           ./hardware/desktop/default.nix
           { home-manager.users.llelievr = import ./hardware/desktop/home/llelievr/default.nix; }
         ];

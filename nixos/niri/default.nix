@@ -9,7 +9,6 @@
 
   services.upower.enable = true;
   services.power-profiles-daemon.enable = true;
-  services.gnome.gnome-keyring.enable = true;
   services.gnome.gcr-ssh-agent.enable = false; # conflicts with programs.ssh.startAgent in config-commons
 
   services.displayManager.sddm = {
