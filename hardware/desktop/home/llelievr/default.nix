@@ -14,9 +14,8 @@ in
   imports = [
     (modules + /commons.nix)
     (modules + /shell.nix)
-    # (modules + /ulauncher)
-    # (modules + /gnome)
-    (modules + /kde)
+    # (modules + /kde)
+    (modules + /niri)
   ];
 
   home.username = "llelievr";

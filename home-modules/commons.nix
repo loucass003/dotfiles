@@ -1,26 +1,11 @@
 {
   config,
   inputs,
-  channels,
   pkgs,
+  pkgs-stable,
   ...
 }:
 
-let
-  enableWayland =
-    drv: bin:
-    drv.overrideAttrs (old: {
-      nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.makeWrapper ];
-      postFixup = (old.postFixup or "") + ''
-        wrapProgram $out/bin/${bin} \
-          --add-flags "--enable-features=UseOzonePlatform,WaylandWindowDecorations,WaylandPerMonitorScaling" \
-          --add-flags "--ozone-platform=wayland"
-      '';
-    });
-
-  discord-wl = enableWayland pkgs.discord "discord";
-  spotify-wl = enableWayland pkgs.spotify "spotify";
-in
 {
 
   # Packages that should be installed to the user profile.
@@ -48,7 +33,7 @@ in
 
     # nix related
     nix-output-monitor
-    nixfmt-rfc-style
+    nixfmt
 
     # secrets management
     sops
@@ -92,11 +77,11 @@ in
         QT_STYLE_OVERRIDE = "default";
       };
     })
-    discord-wl
+    vesktop
     spotify
     (prismlauncher.override {
       # Add binary required by some mod
-      additionalPrograms = [ ffmpeg ];
+      additionalPrograms = [ ffmpeg glfw zenity ];
 
       # Change Java runtimes available to Prism Launcher
       jdks = [
@@ -115,9 +100,8 @@ in
     direnv
     inputs.affinity-nix.packages.${pkgs.system}.v3
 
-    inputs.hytale-launcher.packages.x86_64-linux.default
+    inputs.hytale-launcher.packages.${pkgs.system}.default
 
-    ghostty
     # davinci-resolve
     kdePackages.kdenlive
 
@@ -134,7 +118,7 @@ in
 
   programs.obs-studio = {
     enable = true;
-    plugins = with channels.nixpkgs-stable.obs-studio-plugins; [
+    plugins = with pkgs-stable.obs-studio-plugins; [
       # obs-ndi
       # inputs.distroav.packages.${pkgs.system}.distroav
     ];
@@ -144,9 +128,9 @@ in
   programs.git = {
     enable = true;
     lfs.enable = true;
-    userName = "loucass003";
-    userEmail = "loucass003@gmail.com";
-    extraConfig = {
+    settings = {
+      user.name = "loucass003";
+      user.email = "loucass003@gmail.com";
       init.defaultBranch = "main";
       push.autoSetupRemote = true;
     };
