@@ -126,6 +126,7 @@
         telemetryEnabled = false;
         showChangelogOnStartup = false;
         lockOnSuspend = true;
+        animationSpeed = 2.0;
       };
       wallpaper = {
         enabled = false;
@@ -199,6 +200,9 @@
       NIXOS_OZONE_WL = "1";
       GTK_THEME = "Tokyonight-Dark";
       QT_STYLE_OVERRIDE = "adwaita-dark";
+      LIBVA_DRIVER_NAME = "radeonsi";
+      AMD_VULKAN_ICD = "RADV";
+      QSG_RHI_BACKEND = "vulkan";
     };
 
     prefer-no-csd = true;

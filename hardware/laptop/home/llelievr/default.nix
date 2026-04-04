@@ -8,7 +8,7 @@
 
 let
   modules = ../../../../home-modules;
-  mpvOpts = "loop-playlist --shuffle --panscan=1.0 --video-unscaled=no --image-display-duration=300 --loop-file=yes --length=300";
+  mpvOpts = "loop-playlist --shuffle --panscan=1.0 --video-unscaled=no --image-display-duration=300 --loop-file=yes --length=300 --hwdec=auto --vo=gpu";
   mpvpaperLauncher = pkgs.writeShellScript "mpvpaper-launcher" ''
     mpvpaper "eDP-1" -o "${mpvOpts}" "$HOME/Pictures/Wallpapers" &
     mpvpaper "DP-6" -o "${mpvOpts}" "$HOME/Pictures/Wallpapers" &
