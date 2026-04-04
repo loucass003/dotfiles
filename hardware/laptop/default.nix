@@ -17,7 +17,6 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     ../config-commons.nix
-    # ../../nixos/gnome
     ../../nixos/kde
     ../../nixos/webdav.nix
   ];
@@ -32,21 +31,19 @@
   ];
   boot.initrd.kernelModules = [
     "amdgpu"
-    "v4l2loopback"
     "thunderbolt"
     # "nvidia"
   ];
-  boot.kernelModules = [ 
-    "kvm-amd" 
-    "thunderbolt"
-    # "nvidia"
-    # "nvidia_modeset"
-    # "nvidia_uvm"
-    # "nvidia_drm"
+  boot.kernelModules = [
+    "kvm-amd"
+    "nvidia"
+    "nvidia_modeset"
+    "nvidia_uvm"
+    "nvidia_drm"
+    "v4l2loopback"
   ];
 
   services.hardware.bolt.enable = true;
-
 
   boot.extraModulePackages = with config.boot.kernelPackages; [
     v4l2loopback
@@ -83,9 +80,9 @@
 
   services.xserver = {
     enable = true;
-    videoDrivers = [ 
-      "amdgpu" 
-      # "nvidia" 
+    videoDrivers = [
+      "amdgpu"
+      "nvidia"
     ];
     # desktopManager.gnome.enable = true;
     xkb = {
@@ -119,15 +116,11 @@
 
   # };
 
-  # systemd.services.nvidia-suspend.enable = true;
-  # systemd.services.nvidia-resume.enable = true;
-  # systemd.services.nvidia-hibernate.enable = true;
+  hardware.nvidia.prime = {
+    allowExternalGpu = true;
+  };
 
-  # hardware.nvidia.prime = {
-  #   allowExternalGpu = true;
-  # };
-	    
-	services.thermald.enable = true;
+  services.thermald.enable = true;
 
   boot.kernelParams = [ 
     # This is the "Magic Fix" for the NuPhy/Power limit issue without touching Monitors
@@ -226,16 +219,4 @@
 
   networking.firewall.enable = false;
   networking.enableIPv6 = false;
-
-  services.fprintd.enable = lib.mkForce false;
-
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.11"; # Did you read the comment?
-
 }

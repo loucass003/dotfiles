@@ -1,7 +1,5 @@
-{ pkgs, ... }:
+{ pkgs, config, lib, ... }:
 
-let
-in
 {
   programs.plasma = {
     enable = true;
@@ -26,6 +24,7 @@ in
       name = "breeze-dark";
       package = pkgs.kdePackages.breeze-icons;
     };
+    gtk2.configLocation = "${config.xdg.configHome}/gtk-2.0/gtkrc";
   };
 
   xdg = {

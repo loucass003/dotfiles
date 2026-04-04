@@ -14,10 +14,25 @@ in
   imports = [
     (modules + /commons.nix)
     (modules + /shell.nix)
-    # (modules + /ulauncher)
-    # (modules + /gnome)
-    (modules + /kde)
+    # (modules + /kde)
+    (modules + /niri)
   ];
+
+  programs.niri.settings.outputs = {
+    # Acer K242HL — top monitor
+    "HDMI-A-1" = {
+      mode = { width = 1920; height = 1080; refresh = 60.0; };
+      position = { x = 320; y = 0; };
+      scale = 1.0;
+    };
+    # LG UltraGear — bottom monitor (primary)
+    "DP-2" = {
+      mode = { width = 2560; height = 1440; refresh = 144.0; };
+      position = { x = 0; y = 1080; };
+      scale = 1.0;
+      variable-refresh-rate = true;
+    };
+  };
 
   home.username = "llelievr";
   home.homeDirectory = "/home/llelievr";
