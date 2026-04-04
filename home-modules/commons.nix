@@ -6,7 +6,7 @@
   ...
 }:
 
-let 
+let
   enableWayland =
     drv: bin:
     drv.overrideAttrs (old: {
@@ -98,7 +98,11 @@ in
     spotify
     (prismlauncher.override {
       # Add binary required by some mod
-      additionalPrograms = [ ffmpeg glfw zenity ];
+      additionalPrograms = [
+        ffmpeg
+        glfw
+        zenity
+      ];
 
       # Change Java runtimes available to Prism Launcher
       jdks = [

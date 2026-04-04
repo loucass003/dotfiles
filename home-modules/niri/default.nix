@@ -5,28 +5,51 @@
   ...
 }:
 
+let
+  colors = {
+    bg        = "#1a1b26";
+    bgDark    = "#15161e";
+    bgVariant = "#24283b";
+    outline   = "#353d57";
+    shadow    = "#15161e";
+    fg        = "#c0caf5";
+    fgMuted   = "#9aa5ce";
+    fgDim     = "#a9b1d6";
+    onDark    = "#16161e";
+    blue      = "#7aa2f7";
+    purple    = "#bb9af7";
+    green     = "#9ece6a";
+    red       = "#f7768e";
+    yellow    = "#e0af68";
+    cyan      = "#7dcfff";
+    brightBg  = "#414868";
+    selection = "#33467c";
+    inactiveBorder = "#3b4261";
+  };
+in
+
 {
   imports = [ inputs.noctalia.homeModules.default ];
 
   programs.noctalia-shell = {
     enable = true;
     colors = {
-      mError = "#f7768e";
-      mHover = "#9ece6a";
-      mOnError = "#16161e";
-      mOnHover = "#16161e";
-      mOnPrimary = "#16161e";
-      mOnSecondary = "#16161e";
-      mOnSurface = "#c0caf5";
-      mOnSurfaceVariant = "#9aa5ce";
-      mOnTertiary = "#16161e";
-      mOutline = "#353d57";
-      mPrimary = "#7aa2f7";
-      mSecondary = "#bb9af7";
-      mShadow = "#15161e";
-      mSurface = "#1a1b26";
-      mSurfaceVariant = "#24283b";
-      mTertiary = "#9ece6a";
+      mError            = colors.red;
+      mHover            = colors.green;
+      mOnError          = colors.onDark;
+      mOnHover          = colors.onDark;
+      mOnPrimary        = colors.onDark;
+      mOnSecondary      = colors.onDark;
+      mOnSurface        = colors.fg;
+      mOnSurfaceVariant = colors.fgMuted;
+      mOnTertiary       = colors.onDark;
+      mOutline          = colors.outline;
+      mPrimary          = colors.blue;
+      mSecondary        = colors.purple;
+      mShadow           = colors.shadow;
+      mSurface          = colors.bg;
+      mSurfaceVariant   = colors.bgVariant;
+      mTertiary         = colors.green;
     };
     plugins = {
       sources = [
@@ -190,8 +213,8 @@
       };
       focus-ring = {
         width = 2;
-        active.color = "#7aa2f7";
-        inactive.color = "#3b4261";
+        active.color = colors.blue;
+        inactive.color = colors.inactiveBorder;
       };
       border.enable = false;
     };
@@ -231,170 +254,201 @@
 
     binds = {
       # Terminal
-      "Mod+Return".action.spawn = "kitty";
-      "Mod+Shift+Q".action.close-window = { };
+      "Mod+Return" = { hotkey-overlay.title = "Open terminal"; action.spawn = "kitty"; };
+      "Mod+Shift+Q" = { hotkey-overlay.title = "Close window"; action.close-window = { }; };
 
-      "Mod+F1".action.spawn = [
-        "noctalia-shell"
-        "ipc"
-        "call"
-        "plugin:keybind-cheatsheet"
-        "toggle"
-      ];
+      "Mod+F1" = {
+        hotkey-overlay.title = "Toggle keybind cheatsheet";
+        action.spawn = [
+          "noctalia-shell"
+          "ipc"
+          "call"
+          "plugin:keybind-cheatsheet"
+          "toggle"
+        ];
+      };
 
       # Noctalia panels
-      "Mod+Space".action.spawn = [
-        "noctalia-shell"
-        "ipc"
-        "call"
-        "launcher"
-        "toggle"
-      ];
-      "Mod+Ctrl+C".action.spawn = [
-        "noctalia-shell"
-        "ipc"
-        "call"
-        "controlCenter"
-        "toggle"
-      ];
-      "Mod+Ctrl+N".action.spawn = [
-        "noctalia-shell"
-        "ipc"
-        "call"
-        "notifications"
-        "toggleHistory"
-      ];
-      "Mod+Ctrl+M".action.spawn = [
-        "noctalia-shell"
-        "ipc"
-        "call"
-        "media"
-        "toggle"
-      ];
+      "Mod+Space" = {
+        hotkey-overlay.title = "Toggle app launcher";
+        action.spawn = [
+          "noctalia-shell"
+          "ipc"
+          "call"
+          "launcher"
+          "toggle"
+        ];
+      };
+      "Mod+Ctrl+C" = {
+        hotkey-overlay.title = "Toggle control center";
+        action.spawn = [
+          "noctalia-shell"
+          "ipc"
+          "call"
+          "controlCenter"
+          "toggle"
+        ];
+      };
+      "Mod+Ctrl+N" = {
+        hotkey-overlay.title = "Toggle notification history";
+        action.spawn = [
+          "noctalia-shell"
+          "ipc"
+          "call"
+          "notifications"
+          "toggleHistory"
+        ];
+      };
+      "Mod+Ctrl+M" = {
+        hotkey-overlay.title = "Toggle media player";
+        action.spawn = [
+          "noctalia-shell"
+          "ipc"
+          "call"
+          "media"
+          "toggle"
+        ];
+      };
 
       # Session
-      "Mod+Shift+L".action.spawn = [
-        "noctalia-shell"
-        "ipc"
-        "call"
-        "lockScreen"
-        "lock"
-      ];
-      "Mod+Shift+E".action.spawn = [
-        "noctalia-shell"
-        "ipc"
-        "call"
-        "sessionMenu"
-        "toggle"
-      ];
-      "Mod+Shift+P".action.power-off-monitors = { };
+      "Mod+Shift+L" = {
+        hotkey-overlay.title = "Lock screen";
+        action.spawn = [
+          "noctalia-shell"
+          "ipc"
+          "call"
+          "lockScreen"
+          "lock"
+        ];
+      };
+      "Mod+Shift+E" = {
+        hotkey-overlay.title = "Toggle session menu";
+        action.spawn = [
+          "noctalia-shell"
+          "ipc"
+          "call"
+          "sessionMenu"
+          "toggle"
+        ];
+      };
+      "Mod+Shift+P" = { hotkey-overlay.title = "Power off monitors"; action.power-off-monitors = { }; };
 
       # Focus movement
-      "Mod+Left".action.focus-column-left = { };
-      "Mod+Down".action.focus-window-down = { };
-      "Mod+Up".action.focus-window-up = { };
-      "Mod+Right".action.focus-column-right = { };
-      "Mod+H".action.focus-column-left = { };
-      "Mod+J".action.focus-window-down = { };
-      "Mod+K".action.focus-window-up = { };
-      "Mod+L".action.focus-column-right = { };
+      "Mod+Left" = { hotkey-overlay.title = "Focus column left"; action.focus-column-left = { }; };
+      "Mod+Down" = { hotkey-overlay.title = "Focus window down"; action.focus-window-down = { }; };
+      "Mod+Up" = { hotkey-overlay.title = "Focus window up"; action.focus-window-up = { }; };
+      "Mod+Right" = { hotkey-overlay.title = "Focus column right"; action.focus-column-right = { }; };
+      "Mod+H" = { hotkey-overlay.title = "Focus column left"; action.focus-column-left = { }; };
+      "Mod+J" = { hotkey-overlay.title = "Focus window down"; action.focus-window-down = { }; };
+      "Mod+K" = { hotkey-overlay.title = "Focus window up"; action.focus-window-up = { }; };
+      "Mod+L" = { hotkey-overlay.title = "Focus column right"; action.focus-column-right = { }; };
 
       # Window movement
-      "Mod+Shift+Left".action.move-column-left = { };
-      "Mod+Shift+Down".action.move-window-down = { };
-      "Mod+Shift+Up".action.move-window-up = { };
-      "Mod+Shift+Right".action.move-column-right = { };
-      "Mod+Shift+H".action.move-column-left = { };
-      "Mod+Shift+J".action.move-window-down = { };
-      "Mod+Shift+K".action.move-window-up = { };
+      "Mod+Shift+Left" = { hotkey-overlay.title = "Move column left"; action.move-column-left = { }; };
+      "Mod+Shift+Down" = { hotkey-overlay.title = "Move window down"; action.move-window-down = { }; };
+      "Mod+Shift+Up" = { hotkey-overlay.title = "Move window up"; action.move-window-up = { }; };
+      "Mod+Shift+Right" = { hotkey-overlay.title = "Move column right"; action.move-column-right = { }; };
+      "Mod+Shift+H" = { hotkey-overlay.title = "Move column left"; action.move-column-left = { }; };
+      "Mod+Shift+J" = { hotkey-overlay.title = "Move window down"; action.move-window-down = { }; };
+      "Mod+Shift+K" = { hotkey-overlay.title = "Move window up"; action.move-window-up = { }; };
 
       # Column / window sizing
-      "Mod+R".action.switch-preset-column-width = { };
-      "Mod+Shift+R".action.switch-preset-window-height = { };
-      "Mod+F".action.maximize-column = { };
-      "Mod+Shift+F".action.fullscreen-window = { };
-      "Mod+C".action.center-column = { };
-      "Mod+Minus".action.set-column-width = "-10%";
-      "Mod+Equal".action.set-column-width = "+10%";
-      "Mod+Shift+Minus".action.set-window-height = "-10%";
-      "Mod+Shift+Equal".action.set-window-height = "+10%";
+      "Mod+R" = { hotkey-overlay.title = "Cycle preset column width"; action.switch-preset-column-width = { }; };
+      "Mod+Shift+R" = { hotkey-overlay.title = "Cycle preset window height"; action.switch-preset-window-height = { }; };
+      "Mod+F" = { hotkey-overlay.title = "Maximize column"; action.maximize-column = { }; };
+      "Mod+Shift+F" = { hotkey-overlay.title = "Fullscreen window"; action.fullscreen-window = { }; };
+      "Mod+C" = { hotkey-overlay.title = "Center column"; action.center-column = { }; };
+      "Mod+Minus" = { hotkey-overlay.title = "Decrease column width"; action.set-column-width = "-10%"; };
+      "Mod+Equal" = { hotkey-overlay.title = "Increase column width"; action.set-column-width = "+10%"; };
+      "Mod+Shift+Minus" = { hotkey-overlay.title = "Decrease window height"; action.set-window-height = "-10%"; };
+      "Mod+Shift+Equal" = { hotkey-overlay.title = "Increase window height"; action.set-window-height = "+10%"; };
 
       # Workspaces
-      "Mod+Page_Down".action.focus-workspace-down = { };
-      "Mod+Page_Up".action.focus-workspace-up = { };
-      "Mod+Shift+Page_Down".action.move-column-to-workspace-down = { };
-      "Mod+Shift+Page_Up".action.move-column-to-workspace-up = { };
+      "Mod+Page_Down" = { hotkey-overlay.title = "Focus workspace below"; action.focus-workspace-down = { }; };
+      "Mod+Page_Up" = { hotkey-overlay.title = "Focus workspace above"; action.focus-workspace-up = { }; };
+      "Mod+Shift+Page_Down" = { hotkey-overlay.title = "Move column to workspace below"; action.move-column-to-workspace-down = { }; };
+      "Mod+Shift+Page_Up" = { hotkey-overlay.title = "Move column to workspace above"; action.move-column-to-workspace-up = { }; };
 
-      "Mod+1".action.focus-workspace = 1;
-      "Mod+2".action.focus-workspace = 2;
-      "Mod+3".action.focus-workspace = 3;
-      "Mod+4".action.focus-workspace = 4;
-      "Mod+5".action.focus-workspace = 5;
-      "Mod+6".action.focus-workspace = 6;
-      "Mod+7".action.focus-workspace = 7;
-      "Mod+8".action.focus-workspace = 8;
-      "Mod+9".action.focus-workspace = 9;
-      "Mod+Shift+1".action.move-column-to-workspace = 1;
-      "Mod+Shift+2".action.move-column-to-workspace = 2;
-      "Mod+Shift+3".action.move-column-to-workspace = 3;
-      "Mod+Shift+4".action.move-column-to-workspace = 4;
-      "Mod+Shift+5".action.move-column-to-workspace = 5;
-      "Mod+Shift+6".action.move-column-to-workspace = 6;
-      "Mod+Shift+7".action.move-column-to-workspace = 7;
-      "Mod+Shift+8".action.move-column-to-workspace = 8;
-      "Mod+Shift+9".action.move-column-to-workspace = 9;
+      "Mod+1" = { hotkey-overlay.title = "Focus workspace 1"; action.focus-workspace = 1; };
+      "Mod+2" = { hotkey-overlay.title = "Focus workspace 2"; action.focus-workspace = 2; };
+      "Mod+3" = { hotkey-overlay.title = "Focus workspace 3"; action.focus-workspace = 3; };
+      "Mod+4" = { hotkey-overlay.title = "Focus workspace 4"; action.focus-workspace = 4; };
+      "Mod+5" = { hotkey-overlay.title = "Focus workspace 5"; action.focus-workspace = 5; };
+      "Mod+6" = { hotkey-overlay.title = "Focus workspace 6"; action.focus-workspace = 6; };
+      "Mod+7" = { hotkey-overlay.title = "Focus workspace 7"; action.focus-workspace = 7; };
+      "Mod+8" = { hotkey-overlay.title = "Focus workspace 8"; action.focus-workspace = 8; };
+      "Mod+9" = { hotkey-overlay.title = "Focus workspace 9"; action.focus-workspace = 9; };
+      "Mod+Shift+1" = { hotkey-overlay.title = "Move column to workspace 1"; action.move-column-to-workspace = 1; };
+      "Mod+Shift+2" = { hotkey-overlay.title = "Move column to workspace 2"; action.move-column-to-workspace = 2; };
+      "Mod+Shift+3" = { hotkey-overlay.title = "Move column to workspace 3"; action.move-column-to-workspace = 3; };
+      "Mod+Shift+4" = { hotkey-overlay.title = "Move column to workspace 4"; action.move-column-to-workspace = 4; };
+      "Mod+Shift+5" = { hotkey-overlay.title = "Move column to workspace 5"; action.move-column-to-workspace = 5; };
+      "Mod+Shift+6" = { hotkey-overlay.title = "Move column to workspace 6"; action.move-column-to-workspace = 6; };
+      "Mod+Shift+7" = { hotkey-overlay.title = "Move column to workspace 7"; action.move-column-to-workspace = 7; };
+      "Mod+Shift+8" = { hotkey-overlay.title = "Move column to workspace 8"; action.move-column-to-workspace = 8; };
+      "Mod+Shift+9" = { hotkey-overlay.title = "Move column to workspace 9"; action.move-column-to-workspace = 9; };
 
       # Multi-monitor
-      "Mod+Ctrl+Left".action.focus-monitor-left = { };
-      "Mod+Ctrl+Right".action.focus-monitor-right = { };
-      "Mod+Ctrl+Up".action.focus-monitor-up = { };
-      "Mod+Ctrl+Down".action.focus-monitor-down = { };
-      "Mod+Shift+Ctrl+Left".action.move-column-to-monitor-left = { };
-      "Mod+Shift+Ctrl+Right".action.move-column-to-monitor-right = { };
-      "Mod+Shift+Ctrl+Up".action.move-column-to-monitor-up = { };
-      "Mod+Shift+Ctrl+Down".action.move-column-to-monitor-down = { };
+      "Mod+Ctrl+Left" = { hotkey-overlay.title = "Focus monitor left"; action.focus-monitor-left = { }; };
+      "Mod+Ctrl+Right" = { hotkey-overlay.title = "Focus monitor right"; action.focus-monitor-right = { }; };
+      "Mod+Ctrl+Up" = { hotkey-overlay.title = "Focus monitor up"; action.focus-monitor-up = { }; };
+      "Mod+Ctrl+Down" = { hotkey-overlay.title = "Focus monitor down"; action.focus-monitor-down = { }; };
+      "Mod+Shift+Ctrl+Left" = { hotkey-overlay.title = "Move column to monitor left"; action.move-column-to-monitor-left = { }; };
+      "Mod+Shift+Ctrl+Right" = { hotkey-overlay.title = "Move column to monitor right"; action.move-column-to-monitor-right = { }; };
+      "Mod+Shift+Ctrl+Up" = { hotkey-overlay.title = "Move column to monitor up"; action.move-column-to-monitor-up = { }; };
+      "Mod+Shift+Ctrl+Down" = { hotkey-overlay.title = "Move column to monitor down"; action.move-column-to-monitor-down = { }; };
 
       # Screenshots
-      "Print".action.spawn = [
-        "bash"
-        "-c"
-        ''
-          FILE="$HOME/Pictures/Screenshots/Screenshot from $(date '+%Y-%m-%d %H-%M-%S').png"
-          grim -g "$(slurp)" "$FILE" && wl-copy < "$FILE"
-        ''
-      ];
-      "Ctrl+Print".action.spawn = [
-        "bash"
-        "-c"
-        ''
-          FILE="$HOME/Pictures/Screenshots/Screenshot from $(date '+%Y-%m-%d %H-%M-%S').png"
-          grim "$FILE" && wl-copy < "$FILE"
-        ''
-      ];
-      "Alt+Print".action.screenshot-window = { };
+      "Print" = {
+        hotkey-overlay.title = "Screenshot region to clipboard";
+        action.spawn = [
+          "bash"
+          "-c"
+          ''
+            FILE="$HOME/Pictures/Screenshots/Screenshot from $(date '+%Y-%m-%d %H-%M-%S').png"
+            grim -g "$(slurp)" "$FILE" && wl-copy < "$FILE"
+          ''
+        ];
+      };
+      "Ctrl+Print" = {
+        hotkey-overlay.title = "Screenshot full screen to clipboard";
+        action.spawn = [
+          "bash"
+          "-c"
+          ''
+            FILE="$HOME/Pictures/Screenshots/Screenshot from $(date '+%Y-%m-%d %H-%M-%S').png"
+            grim "$FILE" && wl-copy < "$FILE"
+          ''
+        ];
+      };
+      "Alt+Print" = { hotkey-overlay.title = "Screenshot focused window"; action.screenshot-window = { }; };
 
       # Screen recording (toggle)
-      "Shift+Print".action.spawn = [
-        "bash"
-        "-c"
-        ''
-          if [ -f /tmp/.wf-recording ]; then
-            pkill -SIGINT wf-recorder
-          else
-            REGION="$(slurp)" || exit 1
-            mkdir -p "$HOME/Videos/Recordings"
-            FILE="$HOME/Videos/Recordings/Recording from $(date '+%Y-%m-%d %H-%M-%S').mp4"
-            touch /tmp/.wf-recording
-            wf-recorder -g "$REGION" -f "$FILE"
-            rm -f /tmp/.wf-recording
-            action=$(notify-send --wait -i media-record --action="open=Open Folder" "Screen Recording" "Saved to ~/Videos/Recordings")
-            [ "$action" = "open" ] && xdg-open "$HOME/Videos/Recordings"
-          fi
-        ''
-      ];
+      "Shift+Print" = {
+        hotkey-overlay.title = "Toggle screen recording";
+        action.spawn = [
+          "bash"
+          "-c"
+          ''
+            if [ -f /tmp/.wf-recording ]; then
+              pkill -SIGINT wf-recorder
+            else
+              REGION="$(slurp)" || exit 1
+              mkdir -p "$HOME/Videos/Recordings"
+              FILE="$HOME/Videos/Recordings/Recording from $(date '+%Y-%m-%d %H-%M-%S').mp4"
+              touch /tmp/.wf-recording
+              wf-recorder -g "$REGION" -f "$FILE"
+              rm -f /tmp/.wf-recording
+              action=$(notify-send --wait -i media-record --action="open=Open Folder" "Screen Recording" "Saved to ~/Videos/Recordings")
+              [ "$action" = "open" ] && xdg-open "$HOME/Videos/Recordings"
+            fi
+          ''
+        ];
+      };
 
       # Media keys — routed through noctalia for overlays
       "XF86AudioRaiseVolume" = {
+        hotkey-overlay.title = "Increase volume";
         allow-when-locked = true;
         action.spawn = [
           "noctalia-shell"
@@ -405,6 +459,7 @@
         ];
       };
       "XF86AudioLowerVolume" = {
+        hotkey-overlay.title = "Decrease volume";
         allow-when-locked = true;
         action.spawn = [
           "noctalia-shell"
@@ -415,6 +470,7 @@
         ];
       };
       "XF86AudioMute" = {
+        hotkey-overlay.title = "Mute output";
         allow-when-locked = true;
         action.spawn = [
           "noctalia-shell"
@@ -424,65 +480,138 @@
           "muteOutput"
         ];
       };
-      "XF86AudioMicMute".action.spawn = [
-        "noctalia-shell"
-        "ipc"
-        "call"
-        "volume"
-        "muteInput"
-      ];
-      "XF86MonBrightnessUp".action.spawn = [
-        "noctalia-shell"
-        "ipc"
-        "call"
-        "brightness"
-        "increase"
-      ];
-      "XF86MonBrightnessDown".action.spawn = [
-        "noctalia-shell"
-        "ipc"
-        "call"
-        "brightness"
-        "decrease"
-      ];
-      "XF86AudioPlay".action.spawn = [
-        "noctalia-shell"
-        "ipc"
-        "call"
-        "media"
-        "playPause"
-      ];
-      "XF86AudioPause".action.spawn = [
-        "noctalia-shell"
-        "ipc"
-        "call"
-        "media"
-        "playPause"
-      ];
-      "XF86AudioNext".action.spawn = [
-        "noctalia-shell"
-        "ipc"
-        "call"
-        "media"
-        "next"
-      ];
-      "XF86AudioPrev".action.spawn = [
-        "noctalia-shell"
-        "ipc"
-        "call"
-        "media"
-        "previous"
-      ];
+      "XF86AudioMicMute" = {
+        hotkey-overlay.title = "Mute microphone";
+        action.spawn = [
+          "noctalia-shell"
+          "ipc"
+          "call"
+          "volume"
+          "muteInput"
+        ];
+      };
+      "XF86MonBrightnessUp" = {
+        hotkey-overlay.title = "Increase brightness";
+        action.spawn = [
+          "noctalia-shell"
+          "ipc"
+          "call"
+          "brightness"
+          "increase"
+        ];
+      };
+      "XF86MonBrightnessDown" = {
+        hotkey-overlay.title = "Decrease brightness";
+        action.spawn = [
+          "noctalia-shell"
+          "ipc"
+          "call"
+          "brightness"
+          "decrease"
+        ];
+      };
+      "XF86AudioPlay" = {
+        hotkey-overlay.title = "Play/pause media";
+        action.spawn = [
+          "noctalia-shell"
+          "ipc"
+          "call"
+          "media"
+          "playPause"
+        ];
+      };
+      "XF86AudioPause" = {
+        hotkey-overlay.title = "Play/pause media";
+        action.spawn = [
+          "noctalia-shell"
+          "ipc"
+          "call"
+          "media"
+          "playPause"
+        ];
+      };
+      "XF86AudioNext" = {
+        hotkey-overlay.title = "Next track";
+        action.spawn = [
+          "noctalia-shell"
+          "ipc"
+          "call"
+          "media"
+          "next"
+        ];
+      };
+      "XF86AudioPrev" = {
+        hotkey-overlay.title = "Previous track";
+        action.spawn = [
+          "noctalia-shell"
+          "ipc"
+          "call"
+          "media"
+          "previous"
+        ];
+      };
     };
   };
 
   home.file."Pictures/Wallpapers".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/wallpapers";
 
+  programs.kitty = {
+    enable = true;
+    settings = {
+      # Tokyo Night – matches Noctalia color scheme
+      background            = colors.bg;
+      foreground            = colors.fg;
+      selection_background  = colors.selection;
+      selection_foreground  = colors.fg;
+      url_color             = colors.cyan;
+      cursor                = colors.fg;
+      cursor_text_color     = colors.bg;
+
+      # Normal colors
+      color0  = colors.bgDark;    # black
+      color1  = colors.red;       # red
+      color2  = colors.green;     # green
+      color3  = colors.yellow;    # yellow
+      color4  = colors.blue;      # blue
+      color5  = colors.purple;    # magenta
+      color6  = colors.cyan;      # cyan
+      color7  = colors.fgDim;     # white
+
+      # Bright colors
+      color8  = colors.brightBg;  # bright black
+      color9  = colors.red;       # bright red
+      color10 = colors.green;     # bright green
+      color11 = colors.yellow;    # bright yellow
+      color12 = colors.blue;      # bright blue
+      color13 = colors.purple;    # bright magenta
+      color14 = colors.cyan;      # bright cyan
+      color15 = colors.fg;        # bright white
+
+      # Window / decoration
+      background_opacity    = "0.95";
+      window_padding_width  = 8;
+      window_border_width   = "1px";
+      active_border_color   = colors.blue;
+      inactive_border_color = colors.inactiveBorder;
+
+      # Font
+      font_family      = "FiraCode Nerd Font";
+      bold_font        = "FiraCode Nerd Font Bold";
+      italic_font      = "FiraCode Nerd Font Italic";
+      bold_italic_font = "FiraCode Nerd Font Bold Italic";
+      font_size        = "12.0";
+
+      # Misc
+      enable_audio_bell = false;
+      cursor_shape      = "block";
+      cursor_blink_interval = "0";
+    };
+  };
+
   home.packages = with pkgs; [
     mpvpaper
     kdePackages.qtmultimedia
-    kitty
     fuzzel
     brightnessctl
     swaylock
