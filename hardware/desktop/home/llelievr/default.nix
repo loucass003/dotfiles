@@ -8,6 +8,12 @@
 
 let
   modules = ../../../../home-modules;
+  mpvOpts = "loop-playlist --shuffle --panscan=1.0 --video-unscaled=no --image-display-duration=300 --loop-file=yes --length=300";
+  mpvpaperLauncher = pkgs.writeShellScript "mpvpaper-launcher" ''
+    mpvpaper "HDMI-A-1" -o "${mpvOpts}" "$HOME/Pictures/Wallpapers" &
+    mpvpaper "DP-2" -o "${mpvOpts}" "$HOME/Pictures/Wallpapers" &
+    wait
+  '';
 in
 {
 
@@ -16,6 +22,10 @@ in
     (modules + /shell.nix)
     # (modules + /kde)
     (modules + /niri)
+  ];
+
+  programs.niri.settings.spawn-at-startup = [
+    { argv = [ "${mpvpaperLauncher}" ]; }
   ];
 
   programs.niri.settings.outputs = {

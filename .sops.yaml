@@ -10,7 +10,7 @@ keys:
 
   # # Laptop SSH host key converted to age — run on laptop:
   # #   nix-shell -p ssh-to-age --run "ssh-to-age < /etc/ssh/ssh_host_ed25519_key.pub"
-  # - &laptop_host age1REPLACE_WITH_LAPTOP_HOST_AGE_KEY
+  - &laptop_host age1shk8khpyfv7l2p3rjdlrhlrysyxtynu4g8xsepwsx0up4n0v6ctsa2shvv
 
 creation_rules:
   - path_regex: secrets/.*\.yaml$
@@ -18,4 +18,4 @@ creation_rules:
       - age:
           - *personal_key
           - *desktop_host
-          # - *laptop_host
+          - *laptop_host

@@ -17,8 +17,8 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     ../config-commons.nix
-    ../../nixos/kde
-    ../../nixos/webdav.nix
+    ../../nixos/niri
+    ../../nixos/syncthing.nix
   ];
 
   boot.initrd.availableKernelModules = [
@@ -36,10 +36,10 @@
   ];
   boot.kernelModules = [
     "kvm-amd"
-    "nvidia"
-    "nvidia_modeset"
-    "nvidia_uvm"
-    "nvidia_drm"
+    # "nvidia"
+    # "nvidia_modeset"
+    # "nvidia_uvm"
+    # "nvidia_drm"
     "v4l2loopback"
   ];
 
@@ -82,7 +82,7 @@
     enable = true;
     videoDrivers = [
       "amdgpu"
-      "nvidia"
+      # "nvidia"
     ];
     # desktopManager.gnome.enable = true;
     xkb = {
@@ -116,9 +116,9 @@
 
   # };
 
-  hardware.nvidia.prime = {
-    allowExternalGpu = true;
-  };
+  # hardware.nvidia.prime = {
+  #   allowExternalGpu = true;
+  # };
 
   services.thermald.enable = true;
 

@@ -36,7 +36,18 @@
           url = "https://github.com/noctalia-dev/noctalia-plugins";
         }
       ];
-      states = { };
+      states = {
+        network-manager-vpn = {
+          enabled = true;
+        };
+        screen-toolkit = {
+          enabled = true;
+        };
+        keybind-cheatsheet = {
+          enabled = true;
+        };
+        video-wallpaper = { enabled = true; };
+      };
       version = 2;
     };
     settings = {
@@ -62,7 +73,6 @@
             { id = "Workspace"; }
           ];
           right = [
-            { id = "Tray"; }
             {
               id = "CustomButton";
               textCommand = ''
@@ -84,6 +94,16 @@
               showIcon = false;
               leftClickExec = "pkill -SIGINT wf-recorder && rm -f /tmp/.wf-recording";
               generalTooltipText = "Recording in progress — click to stop";
+            }
+            { id = "Tray"; }
+            {
+              id = "plugin:network-manager-vpn";
+            }
+            {
+              id = "plugin:screen-toolkit";
+            }
+            {
+              id = "plugin:keybind-cheatsheet";
             }
             { id = "NotificationHistory"; }
             {
@@ -120,7 +140,7 @@
         predefinedScheme = "Tokyo Night";
       };
       idle = {
-        enabled = false;
+        enabled = true;
       };
       dock = {
         enabled = true;
@@ -203,30 +223,20 @@
 
     spawn-at-startup = [
       { argv = [ "noctalia-shell" ]; }
-      {
-        argv = [
-          "mpvpaper"
-          "HDMI-A-1"
-          "-o"
-          "loop-playlist --shuffle --shuffle-seed=42 --panscan=1.0 --video-unscaled=no --image-display-duration=300"
-          "${config.home.homeDirectory}/Pictures/Wallpapers"
-        ];
-      }
-      {
-        argv = [
-          "mpvpaper"
-          "DP-2"
-          "-o"
-          "loop-playlist --shuffle --shuffle-seed=42 --panscan=1.0 --video-unscaled=no --image-display-duration=300"
-          "${config.home.homeDirectory}/Pictures/Wallpapers"
-        ];
-      }
     ];
 
     binds = {
       # Terminal
       "Mod+Return".action.spawn = "kitty";
       "Mod+Shift+Q".action.close-window = { };
+
+      "Mod+F1".action.spawn = [
+        "noctalia-shell"
+        "ipc"
+        "call"
+        "plugin:keybind-cheatsheet"
+        "toggle"
+      ];
 
       # Noctalia panels
       "Mod+Space".action.spawn = [
@@ -467,6 +477,7 @@
 
   home.packages = with pkgs; [
     mpvpaper
+    kdePackages.qtmultimedia
     kitty
     fuzzel
     brightnessctl
@@ -483,6 +494,17 @@
     inotify-tools
     celluloid
     vlc
+    ffmpegthumbnailer
+    tesseract
+    imagemagick
+    zbar
+    curl
+    translate-shell
+    wl-screenrec
+    ffmpeg
+    gifski
+    cliphist
+    qt6.qt5compat
   ];
 
   gtk = {

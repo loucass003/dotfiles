@@ -6,6 +6,20 @@
   ...
 }:
 
+let 
+  enableWayland =
+    drv: bin:
+    drv.overrideAttrs (old: {
+      nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.makeWrapper ];
+      postFixup = (old.postFixup or "") + ''
+        wrapProgram $out/bin/${bin} \
+          --add-flags "--enable-features=UseOzonePlatform,WaylandWindowDecorations,WaylandPerMonitorScaling" \
+          --add-flags "--ozone-platform=wayland"
+      '';
+    });
+
+  discord-wl = enableWayland pkgs.discord "discord";
+in
 {
 
   # Packages that should be installed to the user profile.
@@ -22,6 +36,7 @@
 
     # utils
     jq # A lightweight and flexible command-line JSON processor
+    rclone # Sync tool for cloud storage
 
     # networking tools
     mtr # A network diagnostic tool
@@ -61,11 +76,8 @@
 
     easyeffects
     pwvucontrol
-<<<<<<< Updated upstream
     # helvum
-=======
     crosspipe
->>>>>>> Stashed changes
     roomeqwizard
     alsa-utils
     ledfx
@@ -112,15 +124,17 @@
 
     rpi-imager
 
-    protonvpn-gui
+    proton-vpn
     gimp
     vlc
     mixxx
     steam-run
-    claude-code
+    # claude-code
     obsidian
     winboat
     realvnc-vnc-viewer
+
+    discord-wl
   ];
 
   programs.obs-studio = {

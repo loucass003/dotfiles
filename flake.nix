@@ -4,7 +4,7 @@
   inputs = {
     self.submodules = true;
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
 
     hytale-launcher.url = "github:JPyke3/hytale-launcher-nix";
 
@@ -96,6 +96,7 @@
         hostname = "llelievr-fw";
         modules = [
           inputs.nixos-hardware.nixosModules.framework-16-7040-amd
+          inputs.niri-flake.nixosModules.niri
           ./hardware/laptop/default.nix
           { home-manager.users.llelievr = import ./hardware/laptop/home/llelievr/default.nix; }
         ];
