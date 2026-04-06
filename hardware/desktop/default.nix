@@ -17,8 +17,9 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     ../config-commons.nix
     # ../../nixos/kde
-    ../../nixos/niri
+    ../../nixos/hyprland
     ../../nixos/webdav.nix
+    ../../nixos/syncthing.nix
   ];
 
   boot.initrd.availableKernelModules = [

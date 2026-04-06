@@ -86,7 +86,7 @@
       nixosConfigurations.desktop = mkNixosConfiguration {
         hostname = "llelievr-desktop";
         modules = [
-          inputs.niri-flake.nixosModules.niri
+          # inputs.niri-flake.nixosModules.niri
           ./hardware/desktop/default.nix
           { home-manager.users.llelievr = import ./hardware/desktop/home/llelievr/default.nix; }
         ];

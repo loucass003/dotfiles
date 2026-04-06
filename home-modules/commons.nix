@@ -94,22 +94,21 @@ in
         QT_STYLE_OVERRIDE = "default";
       };
     })
-    vesktop
     spotify
-    (prismlauncher.override {
-      # Add binary required by some mod
-      additionalPrograms = [
-        ffmpeg
-        glfw
-        zenity
-      ];
-
-      # Change Java runtimes available to Prism Launcher
-      jdks = [
-        openjdk17
-        openjdk21
-      ];
-    })
+    (
+      (prismlauncher.override {
+        additionalPrograms = [
+          ffmpeg
+          glfw3-minecraft
+          zenity
+          xkeyboard_config
+        ];
+        jdks = [
+          temurin-bin-17
+          temurin-bin-21
+        ];
+      })
+    )
     steam
 
     proton-pass

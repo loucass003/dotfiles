@@ -5,7 +5,10 @@
 }:
 
 {
-  programs.niri.enable = true;
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+  };
 
   services.upower.enable = true;
   services.power-profiles-daemon.enable = true;
@@ -32,11 +35,6 @@
   environment.systemPackages = [
     pkgs.sddm-astronaut
   ];
-
-  # environment.sessionVariables = {
-  #   LIBVA_DRIVER_NAME = "radeonsi";
-  #   VDPAU_DRIVER = "radeonsi";
-  # };
 
   environment.pathsToLink = [
     "/share/sddm/themes"

@@ -7,25 +7,27 @@
 
 let
   colors = {
-    bg        = "#1a1b26";
-    bgDark    = "#15161e";
+    bg = "#1a1b26";
+    bgDark = "#15161e";
     bgVariant = "#24283b";
-    outline   = "#353d57";
-    shadow    = "#15161e";
-    fg        = "#c0caf5";
-    fgMuted   = "#9aa5ce";
-    fgDim     = "#a9b1d6";
-    onDark    = "#16161e";
-    blue      = "#7aa2f7";
-    purple    = "#bb9af7";
-    green     = "#9ece6a";
-    red       = "#f7768e";
-    yellow    = "#e0af68";
-    cyan      = "#7dcfff";
-    brightBg  = "#414868";
+    outline = "#353d57";
+    shadow = "#15161e";
+    fg = "#c0caf5";
+    fgMuted = "#9aa5ce";
+    fgDim = "#a9b1d6";
+    onDark = "#16161e";
+    blue = "#7aa2f7";
+    purple = "#bb9af7";
+    green = "#9ece6a";
+    red = "#f7768e";
+    yellow = "#e0af68";
+    cyan = "#7dcfff";
+    brightBg = "#414868";
     selection = "#33467c";
     inactiveBorder = "#3b4261";
   };
+
+
 in
 
 {
@@ -34,22 +36,22 @@ in
   programs.noctalia-shell = {
     enable = true;
     colors = {
-      mError            = colors.red;
-      mHover            = colors.green;
-      mOnError          = colors.onDark;
-      mOnHover          = colors.onDark;
-      mOnPrimary        = colors.onDark;
-      mOnSecondary      = colors.onDark;
-      mOnSurface        = colors.fg;
+      mError = colors.red;
+      mHover = colors.green;
+      mOnError = colors.onDark;
+      mOnHover = colors.onDark;
+      mOnPrimary = colors.onDark;
+      mOnSecondary = colors.onDark;
+      mOnSurface = colors.fg;
       mOnSurfaceVariant = colors.fgMuted;
-      mOnTertiary       = colors.onDark;
-      mOutline          = colors.outline;
-      mPrimary          = colors.blue;
-      mSecondary        = colors.purple;
-      mShadow           = colors.shadow;
-      mSurface          = colors.bg;
-      mSurfaceVariant   = colors.bgVariant;
-      mTertiary         = colors.green;
+      mOnTertiary = colors.onDark;
+      mOutline = colors.outline;
+      mPrimary = colors.blue;
+      mSecondary = colors.purple;
+      mShadow = colors.shadow;
+      mSurface = colors.bg;
+      mSurfaceVariant = colors.bgVariant;
+      mTertiary = colors.green;
     };
     plugins = {
       sources = [
@@ -69,7 +71,9 @@ in
         keybind-cheatsheet = {
           enabled = true;
         };
-        video-wallpaper = { enabled = true; };
+        video-wallpaper = {
+          enabled = true;
+        };
       };
       version = 2;
     };
@@ -201,12 +205,52 @@ in
       };
     };
 
+    animations = {
+      slowdown = 1.0;
+      workspace-switch.kind.spring = {
+        damping-ratio = 1.0;
+        stiffness = 1000;
+        epsilon = 0.0001;
+      };
+      window-open.kind.easing = {
+        duration-ms = 200;
+        curve = "ease-out-expo";
+      };
+      window-close.kind.easing = {
+        duration-ms = 150;
+        curve = "ease-out-quad";
+      };
+      horizontal-view-movement.kind.spring = {
+        damping-ratio = 1.0;
+        stiffness = 800;
+        epsilon = 0.0001;
+      };
+      window-movement.kind.spring = {
+        damping-ratio = 1.0;
+        stiffness = 800;
+        epsilon = 0.0001;
+      };
+      window-resize.kind.spring = {
+        damping-ratio = 1.0;
+        stiffness = 800;
+        epsilon = 0.0001;
+      };
+      config-notification-open-close.kind.spring = {
+        damping-ratio = 0.6;
+        stiffness = 1000;
+        epsilon = 0.001;
+      };
+    };
+
     layout = {
       gaps = 8;
+
+
       preset-column-widths = [
         { proportion = 0.33333; }
         { proportion = 0.5; }
         { proportion = 0.66667; }
+        { proportion = 1.0; }
       ];
       default-column-width = {
         proportion = 1.0;
@@ -220,12 +264,13 @@ in
     };
 
     environment = {
-      NIXOS_OZONE_WL = "1";
+      # NIXOS_OZONE_WL = "1";
       GTK_THEME = "Tokyonight-Dark";
       QT_STYLE_OVERRIDE = "adwaita-dark";
-      LIBVA_DRIVER_NAME = "radeonsi";
-      AMD_VULKAN_ICD = "RADV";
-      QSG_RHI_BACKEND = "vulkan";
+    };
+
+    xwayland-satellite = {
+      enable = true;
     };
 
     prefer-no-csd = true;
@@ -254,8 +299,14 @@ in
 
     binds = {
       # Terminal
-      "Mod+Return" = { hotkey-overlay.title = "Open terminal"; action.spawn = "kitty"; };
-      "Mod+Shift+Q" = { hotkey-overlay.title = "Close window"; action.close-window = { }; };
+      "Mod+Return" = {
+        hotkey-overlay.title = "Open terminal";
+        action.spawn = "kitty";
+      };
+      "Mod+Shift+Q" = {
+        hotkey-overlay.title = "Close window";
+        action.close-window = { };
+      };
 
       "Mod+F1" = {
         hotkey-overlay.title = "Toggle keybind cheatsheet";
@@ -331,72 +382,241 @@ in
           "toggle"
         ];
       };
-      "Mod+Shift+P" = { hotkey-overlay.title = "Power off monitors"; action.power-off-monitors = { }; };
+      "Mod+Shift+P" = {
+        hotkey-overlay.title = "Power off monitors";
+        action.power-off-monitors = { };
+      };
 
       # Focus movement
-      "Mod+Left" = { hotkey-overlay.title = "Focus column left"; action.focus-column-left = { }; };
-      "Mod+Down" = { hotkey-overlay.title = "Focus window down"; action.focus-window-down = { }; };
-      "Mod+Up" = { hotkey-overlay.title = "Focus window up"; action.focus-window-up = { }; };
-      "Mod+Right" = { hotkey-overlay.title = "Focus column right"; action.focus-column-right = { }; };
-      "Mod+H" = { hotkey-overlay.title = "Focus column left"; action.focus-column-left = { }; };
-      "Mod+J" = { hotkey-overlay.title = "Focus window down"; action.focus-window-down = { }; };
-      "Mod+K" = { hotkey-overlay.title = "Focus window up"; action.focus-window-up = { }; };
-      "Mod+L" = { hotkey-overlay.title = "Focus column right"; action.focus-column-right = { }; };
+      "Mod+Left" = {
+        hotkey-overlay.title = "Focus column left";
+        action.focus-column-left = { };
+      };
+      "Mod+Down" = {
+        hotkey-overlay.title = "Focus window down";
+        action.focus-window-down = { };
+      };
+      "Mod+Up" = {
+        hotkey-overlay.title = "Focus window up";
+        action.focus-window-up = { };
+      };
+      "Mod+Right" = {
+        hotkey-overlay.title = "Focus column right";
+        action.focus-column-right = { };
+      };
+      "Mod+H" = {
+        hotkey-overlay.title = "Focus column left";
+        action.focus-column-left = { };
+      };
+      "Mod+J" = {
+        hotkey-overlay.title = "Focus window down";
+        action.focus-window-down = { };
+      };
+      "Mod+K" = {
+        hotkey-overlay.title = "Focus window up";
+        action.focus-window-up = { };
+      };
+      "Mod+L" = {
+        hotkey-overlay.title = "Focus column right";
+        action.focus-column-right = { };
+      };
 
       # Window movement
-      "Mod+Shift+Left" = { hotkey-overlay.title = "Move column left"; action.move-column-left = { }; };
-      "Mod+Shift+Down" = { hotkey-overlay.title = "Move window down"; action.move-window-down = { }; };
-      "Mod+Shift+Up" = { hotkey-overlay.title = "Move window up"; action.move-window-up = { }; };
-      "Mod+Shift+Right" = { hotkey-overlay.title = "Move column right"; action.move-column-right = { }; };
-      "Mod+Shift+H" = { hotkey-overlay.title = "Move column left"; action.move-column-left = { }; };
-      "Mod+Shift+J" = { hotkey-overlay.title = "Move window down"; action.move-window-down = { }; };
-      "Mod+Shift+K" = { hotkey-overlay.title = "Move window up"; action.move-window-up = { }; };
+      "Mod+Shift+Left" = {
+        hotkey-overlay.title = "Move column left";
+        action.move-column-left = { };
+      };
+      "Mod+Shift+Down" = {
+        hotkey-overlay.title = "Move window down";
+        action.move-window-down = { };
+      };
+      "Mod+Shift+Up" = {
+        hotkey-overlay.title = "Move window up";
+        action.move-window-up = { };
+      };
+      "Mod+Shift+Right" = {
+        hotkey-overlay.title = "Move column right";
+        action.move-column-right = { };
+      };
+      "Mod+Shift+H" = {
+        hotkey-overlay.title = "Move column left";
+        action.move-column-left = { };
+      };
+      "Mod+Shift+J" = {
+        hotkey-overlay.title = "Move window down";
+        action.move-window-down = { };
+      };
+      "Mod+Shift+K" = {
+        hotkey-overlay.title = "Move window up";
+        action.move-window-up = { };
+      };
 
       # Column / window sizing
-      "Mod+R" = { hotkey-overlay.title = "Cycle preset column width"; action.switch-preset-column-width = { }; };
-      "Mod+Shift+R" = { hotkey-overlay.title = "Cycle preset window height"; action.switch-preset-window-height = { }; };
-      "Mod+F" = { hotkey-overlay.title = "Maximize column"; action.maximize-column = { }; };
-      "Mod+Shift+F" = { hotkey-overlay.title = "Fullscreen window"; action.fullscreen-window = { }; };
-      "Mod+C" = { hotkey-overlay.title = "Center column"; action.center-column = { }; };
-      "Mod+Minus" = { hotkey-overlay.title = "Decrease column width"; action.set-column-width = "-10%"; };
-      "Mod+Equal" = { hotkey-overlay.title = "Increase column width"; action.set-column-width = "+10%"; };
-      "Mod+Shift+Minus" = { hotkey-overlay.title = "Decrease window height"; action.set-window-height = "-10%"; };
-      "Mod+Shift+Equal" = { hotkey-overlay.title = "Increase window height"; action.set-window-height = "+10%"; };
+      "Mod+R" = {
+        hotkey-overlay.title = "Cycle preset column width";
+        action.switch-preset-column-width = { };
+      };
+      "Mod+Shift+R" = {
+        hotkey-overlay.title = "Cycle preset window height";
+        action.switch-preset-window-height = { };
+      };
+      "Mod+F" = {
+        hotkey-overlay.title = "Maximize column";
+        action.maximize-column = { };
+      };
+      "Mod+Shift+F" = {
+        hotkey-overlay.title = "Fullscreen window";
+        action.fullscreen-window = { };
+      };
+      "Mod+C" = {
+        hotkey-overlay.title = "Center column";
+        action.center-column = { };
+      };
+      "Mod+Minus" = {
+        hotkey-overlay.title = "Decrease column width";
+        action.set-column-width = "-10%";
+      };
+      "Mod+Equal" = {
+        hotkey-overlay.title = "Increase column width";
+        action.set-column-width = "+10%";
+      };
+      "Mod+0" = {
+        hotkey-overlay.title = "Reset column width";
+        action.set-column-width = "100%";
+      };
+      "Mod+Shift+Minus" = {
+        hotkey-overlay.title = "Decrease window height";
+        action.set-window-height = "-10%";
+      };
+      "Mod+Shift+Equal" = {
+        hotkey-overlay.title = "Increase window height";
+        action.set-window-height = "+10%";
+      };
 
       # Workspaces
-      "Mod+Page_Down" = { hotkey-overlay.title = "Focus workspace below"; action.focus-workspace-down = { }; };
-      "Mod+Page_Up" = { hotkey-overlay.title = "Focus workspace above"; action.focus-workspace-up = { }; };
-      "Mod+Shift+Page_Down" = { hotkey-overlay.title = "Move column to workspace below"; action.move-column-to-workspace-down = { }; };
-      "Mod+Shift+Page_Up" = { hotkey-overlay.title = "Move column to workspace above"; action.move-column-to-workspace-up = { }; };
+      "Mod+Page_Down" = {
+        hotkey-overlay.title = "Focus workspace below";
+        action.focus-workspace-down = { };
+      };
+      "Mod+Page_Up" = {
+        hotkey-overlay.title = "Focus workspace above";
+        action.focus-workspace-up = { };
+      };
+      "Mod+Shift+Page_Down" = {
+        hotkey-overlay.title = "Move column to workspace below";
+        action.move-column-to-workspace-down = { };
+      };
+      "Mod+Shift+Page_Up" = {
+        hotkey-overlay.title = "Move column to workspace above";
+        action.move-column-to-workspace-up = { };
+      };
 
-      "Mod+1" = { hotkey-overlay.title = "Focus workspace 1"; action.focus-workspace = 1; };
-      "Mod+2" = { hotkey-overlay.title = "Focus workspace 2"; action.focus-workspace = 2; };
-      "Mod+3" = { hotkey-overlay.title = "Focus workspace 3"; action.focus-workspace = 3; };
-      "Mod+4" = { hotkey-overlay.title = "Focus workspace 4"; action.focus-workspace = 4; };
-      "Mod+5" = { hotkey-overlay.title = "Focus workspace 5"; action.focus-workspace = 5; };
-      "Mod+6" = { hotkey-overlay.title = "Focus workspace 6"; action.focus-workspace = 6; };
-      "Mod+7" = { hotkey-overlay.title = "Focus workspace 7"; action.focus-workspace = 7; };
-      "Mod+8" = { hotkey-overlay.title = "Focus workspace 8"; action.focus-workspace = 8; };
-      "Mod+9" = { hotkey-overlay.title = "Focus workspace 9"; action.focus-workspace = 9; };
-      "Mod+Shift+1" = { hotkey-overlay.title = "Move column to workspace 1"; action.move-column-to-workspace = 1; };
-      "Mod+Shift+2" = { hotkey-overlay.title = "Move column to workspace 2"; action.move-column-to-workspace = 2; };
-      "Mod+Shift+3" = { hotkey-overlay.title = "Move column to workspace 3"; action.move-column-to-workspace = 3; };
-      "Mod+Shift+4" = { hotkey-overlay.title = "Move column to workspace 4"; action.move-column-to-workspace = 4; };
-      "Mod+Shift+5" = { hotkey-overlay.title = "Move column to workspace 5"; action.move-column-to-workspace = 5; };
-      "Mod+Shift+6" = { hotkey-overlay.title = "Move column to workspace 6"; action.move-column-to-workspace = 6; };
-      "Mod+Shift+7" = { hotkey-overlay.title = "Move column to workspace 7"; action.move-column-to-workspace = 7; };
-      "Mod+Shift+8" = { hotkey-overlay.title = "Move column to workspace 8"; action.move-column-to-workspace = 8; };
-      "Mod+Shift+9" = { hotkey-overlay.title = "Move column to workspace 9"; action.move-column-to-workspace = 9; };
+      "Mod+1" = {
+        hotkey-overlay.title = "Focus workspace 1";
+        action.focus-workspace = 1;
+      };
+      "Mod+2" = {
+        hotkey-overlay.title = "Focus workspace 2";
+        action.focus-workspace = 2;
+      };
+      "Mod+3" = {
+        hotkey-overlay.title = "Focus workspace 3";
+        action.focus-workspace = 3;
+      };
+      "Mod+4" = {
+        hotkey-overlay.title = "Focus workspace 4";
+        action.focus-workspace = 4;
+      };
+      "Mod+5" = {
+        hotkey-overlay.title = "Focus workspace 5";
+        action.focus-workspace = 5;
+      };
+      "Mod+6" = {
+        hotkey-overlay.title = "Focus workspace 6";
+        action.focus-workspace = 6;
+      };
+      "Mod+7" = {
+        hotkey-overlay.title = "Focus workspace 7";
+        action.focus-workspace = 7;
+      };
+      "Mod+8" = {
+        hotkey-overlay.title = "Focus workspace 8";
+        action.focus-workspace = 8;
+      };
+      "Mod+9" = {
+        hotkey-overlay.title = "Focus workspace 9";
+        action.focus-workspace = 9;
+      };
+      "Mod+Shift+1" = {
+        hotkey-overlay.title = "Move column to workspace 1";
+        action.move-column-to-workspace = 1;
+      };
+      "Mod+Shift+2" = {
+        hotkey-overlay.title = "Move column to workspace 2";
+        action.move-column-to-workspace = 2;
+      };
+      "Mod+Shift+3" = {
+        hotkey-overlay.title = "Move column to workspace 3";
+        action.move-column-to-workspace = 3;
+      };
+      "Mod+Shift+4" = {
+        hotkey-overlay.title = "Move column to workspace 4";
+        action.move-column-to-workspace = 4;
+      };
+      "Mod+Shift+5" = {
+        hotkey-overlay.title = "Move column to workspace 5";
+        action.move-column-to-workspace = 5;
+      };
+      "Mod+Shift+6" = {
+        hotkey-overlay.title = "Move column to workspace 6";
+        action.move-column-to-workspace = 6;
+      };
+      "Mod+Shift+7" = {
+        hotkey-overlay.title = "Move column to workspace 7";
+        action.move-column-to-workspace = 7;
+      };
+      "Mod+Shift+8" = {
+        hotkey-overlay.title = "Move column to workspace 8";
+        action.move-column-to-workspace = 8;
+      };
+      "Mod+Shift+9" = {
+        hotkey-overlay.title = "Move column to workspace 9";
+        action.move-column-to-workspace = 9;
+      };
 
       # Multi-monitor
-      "Mod+Ctrl+Left" = { hotkey-overlay.title = "Focus monitor left"; action.focus-monitor-left = { }; };
-      "Mod+Ctrl+Right" = { hotkey-overlay.title = "Focus monitor right"; action.focus-monitor-right = { }; };
-      "Mod+Ctrl+Up" = { hotkey-overlay.title = "Focus monitor up"; action.focus-monitor-up = { }; };
-      "Mod+Ctrl+Down" = { hotkey-overlay.title = "Focus monitor down"; action.focus-monitor-down = { }; };
-      "Mod+Shift+Ctrl+Left" = { hotkey-overlay.title = "Move column to monitor left"; action.move-column-to-monitor-left = { }; };
-      "Mod+Shift+Ctrl+Right" = { hotkey-overlay.title = "Move column to monitor right"; action.move-column-to-monitor-right = { }; };
-      "Mod+Shift+Ctrl+Up" = { hotkey-overlay.title = "Move column to monitor up"; action.move-column-to-monitor-up = { }; };
-      "Mod+Shift+Ctrl+Down" = { hotkey-overlay.title = "Move column to monitor down"; action.move-column-to-monitor-down = { }; };
+      "Mod+Ctrl+Left" = {
+        hotkey-overlay.title = "Focus monitor left";
+        action.focus-monitor-left = { };
+      };
+      "Mod+Ctrl+Right" = {
+        hotkey-overlay.title = "Focus monitor right";
+        action.focus-monitor-right = { };
+      };
+      "Mod+Ctrl+Up" = {
+        hotkey-overlay.title = "Focus monitor up";
+        action.focus-monitor-up = { };
+      };
+      "Mod+Ctrl+Down" = {
+        hotkey-overlay.title = "Focus monitor down";
+        action.focus-monitor-down = { };
+      };
+      "Mod+Shift+Ctrl+Left" = {
+        hotkey-overlay.title = "Move column to monitor left";
+        action.move-column-to-monitor-left = { };
+      };
+      "Mod+Shift+Ctrl+Right" = {
+        hotkey-overlay.title = "Move column to monitor right";
+        action.move-column-to-monitor-right = { };
+      };
+      "Mod+Shift+Ctrl+Up" = {
+        hotkey-overlay.title = "Move column to monitor up";
+        action.move-column-to-monitor-up = { };
+      };
+      "Mod+Shift+Ctrl+Down" = {
+        hotkey-overlay.title = "Move column to monitor down";
+        action.move-column-to-monitor-down = { };
+      };
 
       # Screenshots
       "Print" = {
@@ -421,7 +641,10 @@ in
           ''
         ];
       };
-      "Alt+Print" = { hotkey-overlay.title = "Screenshot focused window"; action.screenshot-window = { }; };
+      "Alt+Print" = {
+        hotkey-overlay.title = "Screenshot focused window";
+        action.screenshot-window = { };
+      };
 
       # Screen recording (toggle)
       "Shift+Print" = {
@@ -560,51 +783,51 @@ in
     enable = true;
     settings = {
       # Tokyo Night – matches Noctalia color scheme
-      background            = colors.bg;
-      foreground            = colors.fg;
-      selection_background  = colors.selection;
-      selection_foreground  = colors.fg;
-      url_color             = colors.cyan;
-      cursor                = colors.fg;
-      cursor_text_color     = colors.bg;
+      background = colors.bg;
+      foreground = colors.fg;
+      selection_background = colors.selection;
+      selection_foreground = colors.fg;
+      url_color = colors.cyan;
+      cursor = colors.fg;
+      cursor_text_color = colors.bg;
 
       # Normal colors
-      color0  = colors.bgDark;    # black
-      color1  = colors.red;       # red
-      color2  = colors.green;     # green
-      color3  = colors.yellow;    # yellow
-      color4  = colors.blue;      # blue
-      color5  = colors.purple;    # magenta
-      color6  = colors.cyan;      # cyan
-      color7  = colors.fgDim;     # white
+      color0 = colors.bgDark; # black
+      color1 = colors.red; # red
+      color2 = colors.green; # green
+      color3 = colors.yellow; # yellow
+      color4 = colors.blue; # blue
+      color5 = colors.purple; # magenta
+      color6 = colors.cyan; # cyan
+      color7 = colors.fgDim; # white
 
       # Bright colors
-      color8  = colors.brightBg;  # bright black
-      color9  = colors.red;       # bright red
-      color10 = colors.green;     # bright green
-      color11 = colors.yellow;    # bright yellow
-      color12 = colors.blue;      # bright blue
-      color13 = colors.purple;    # bright magenta
-      color14 = colors.cyan;      # bright cyan
-      color15 = colors.fg;        # bright white
+      color8 = colors.brightBg; # bright black
+      color9 = colors.red; # bright red
+      color10 = colors.green; # bright green
+      color11 = colors.yellow; # bright yellow
+      color12 = colors.blue; # bright blue
+      color13 = colors.purple; # bright magenta
+      color14 = colors.cyan; # bright cyan
+      color15 = colors.fg; # bright white
 
       # Window / decoration
-      background_opacity    = "0.95";
-      window_padding_width  = 8;
-      window_border_width   = "1px";
-      active_border_color   = colors.blue;
+      background_opacity = "0.95";
+      window_padding_width = 8;
+      window_border_width = "1px";
+      active_border_color = colors.blue;
       inactive_border_color = colors.inactiveBorder;
 
       # Font
-      font_family      = "FiraCode Nerd Font";
-      bold_font        = "FiraCode Nerd Font Bold";
-      italic_font      = "FiraCode Nerd Font Italic";
+      font_family = "FiraCode Nerd Font";
+      bold_font = "FiraCode Nerd Font Bold";
+      italic_font = "FiraCode Nerd Font Italic";
       bold_italic_font = "FiraCode Nerd Font Bold Italic";
-      font_size        = "12.0";
+      font_size = "12.0";
 
       # Misc
       enable_audio_bell = false;
-      cursor_shape      = "block";
+      cursor_shape = "block";
       cursor_blink_interval = "0";
     };
   };
@@ -638,6 +861,8 @@ in
     gifski
     cliphist
     qt6.qt5compat
+
+    xwayland-satellite
   ];
 
   gtk = {
