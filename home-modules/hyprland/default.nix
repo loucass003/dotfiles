@@ -99,6 +99,14 @@ in
           ];
           right = [
             { id = "Tray"; }
+            {
+              colorName = "tertiary";
+              hideWhenIdle = true;
+              id = "AudioVisualizer";
+              width = 200;
+            }
+            { id = "Bluetooth"; }
+            { id = "PowerProfile"; }
             { id = "plugin:network-manager-vpn"; }
             { id = "plugin:screen-toolkit"; }
             { id = "plugin:keybind-cheatsheet"; }
@@ -118,6 +126,8 @@ in
             { id = "ControlCenter"; }
           ];
         };
+        mouseWheelAction = "workspace";
+        mouseWheelWrap = true;
       };
       general = {
         telemetryEnabled = false;
@@ -132,6 +142,7 @@ in
         terminalCommand = "kitty";
         sortByMostUsed = true;
         position = "center";
+        enableClipboardHistory = true;
       };
       colorSchemes = {
         darkMode = true;
@@ -234,7 +245,6 @@ in
         vrr = 1;
       };
 
-
       env = [
         "GTK_THEME,Tokyonight-Dark"
         "QT_STYLE_OVERRIDE,adwaita-dark"
@@ -324,19 +334,25 @@ in
       bind = SUPER SHIFT CTRL, Right, movewindow, mon:r                          #"Move window to monitor right"
 
       # 8. Mouse binds
-      bindm = SUPER, mouse:272, movewindow #"Mov0e window"
+      bindm = SUPER, mouse:272, movewindow #"Move window"
       bindm = SUPER, mouse:273, resizewindow #"Resize window"
 
       # 9. Media controls
-      bindl = , XF86AudioRaiseVolume,  exec, noctalia-shell ipc call volume increase              #"Increase volume"
-      bindl = , XF86AudioLowerVolume,  exec, noctalia-shell ipc call volume decrease              #"Decrease volume"
+      bindl = , XF86AudioRaiseVolume,  exec, noctalia-shell ipc call volume increase               #"Increase volume"
+      bindl = , XF86AudioLowerVolume,  exec, noctalia-shell ipc call volume decrease               #"Decrease volume"
       bindl = , XF86AudioMute,          exec, noctalia-shell ipc call volume muteOutput            #"Mute output"
       bindl = , XF86AudioMicMute,       exec, noctalia-shell ipc call volume muteInput             #"Mute microphone"
       bindl = , XF86MonBrightnessUp,    exec, noctalia-shell ipc call brightness increase          #"Increase brightness"
       bindl = , XF86MonBrightnessDown,  exec, noctalia-shell ipc call brightness decrease          #"Decrease brightness"
-      bindl = , XF86AudioPlay,  exec, noctalia-shell ipc call media playPause                     #"Play/pause media"
-      bindl = , XF86AudioNext,  exec, noctalia-shell ipc call media next                          #"Next track"
-      bindl = , XF86AudioPrev,  exec, noctalia-shell ipc call media previous                      #"Previous track"
+      bindl = , XF86AudioPlay,  exec, noctalia-shell ipc call media playPause                      #"Play/pause media"
+      bindl = , XF86AudioNext,  exec, noctalia-shell ipc call media next                           #"Next track"
+      bindl = , XF86AudioPrev,  exec, noctalia-shell ipc call media previous                       #"Previous track"
+
+      # 10. Screenshots
+      bind = , Print, exec, grim -g "$(slurp)" - | tee ~/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S').png | wl-copy   #"Screenshot a region"
+
+      # 11. Clipboard
+      bind = SUPER, V, exec, noctalia-shell ipc call launcher clipboard
     '';
   };
 
@@ -402,14 +418,13 @@ in
   home.packages = with pkgs; [
     mpvpaper
     kdePackages.qtmultimedia
-    fuzzel
     brightnessctl
     swaylock
     adwaita-qt6
     nautilus
     gnome-text-editor
     file-roller
-    grimblast
+    grim
     slurp
     wl-clipboard
     wf-recorder
