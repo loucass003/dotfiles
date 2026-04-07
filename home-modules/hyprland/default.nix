@@ -303,7 +303,7 @@ in
       bind = SUPER CTRL, M,  exec, noctalia-shell ipc call media toggle                          #"Toggle media player"
 
       # 2. Session lockscreen and monitors
-      bind = SUPER SHIFT, L, exec, noctalia-shell ipc call lockScreen lock                       #"Lock screen"
+      bind = SUPER, L, exec, noctalia-shell ipc call lockScreen lock                       #"Lock screen"
       bind = SUPER SHIFT, E, exec, noctalia-shell ipc call sessionMenu toggle                    #"Toggle session menu"
       bind = SUPER SHIFT, P, dpms, off                                                           #"Power off monitors"
 
