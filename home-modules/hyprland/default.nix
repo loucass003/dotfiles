@@ -29,6 +29,13 @@ let
 
   # Strip leading '#' for Hyprland rgb() format
   hex = s: builtins.substring 1 (builtins.stringLength s - 1) s;
+
+  discord-unread-json = pkgs.writers.writePython3Bin "discord-unread-json" {
+    libraries = with pkgs.python3Packages; [
+      dbus-python
+      pygobject3
+    ];
+  } (builtins.readFile ./discord_status.py);
 in
 
 {
@@ -73,6 +80,7 @@ in
           enabled = true;
         };
       };
+      autoUpdate = true;
       version = 2;
     };
     settings = {
@@ -104,6 +112,18 @@ in
               hideWhenIdle = true;
               id = "AudioVisualizer";
               width = 200;
+            }
+            {
+              id = "CustomButton";
+              type = "text";
+              name = "discord";
+              textCommand = "discord-unread-json";
+              textStream = true;
+              hideMode = "expandWithOutput";
+              parseJson = true;
+              leftClickExec = "hyprctl dispatch focuswindow class:discord";
+              showIcon = false;
+              showExecTooltip = false;
             }
             { id = "Bluetooth"; }
             { id = "PowerProfile"; }
@@ -179,7 +199,10 @@ in
 
   wayland.windowManager.hyprland = {
     enable = true;
-
+    systemd = {
+      enable = true;
+      variables = [ "--all" ];
+    };
     settings = {
       general = {
         gaps_in = 4;
@@ -246,8 +269,8 @@ in
       };
 
       env = [
-        "GTK_THEME,Tokyonight-Dark"
-        "QT_STYLE_OVERRIDE,adwaita-dark"
+        # "GTK_THEME,Tokyonight-Dark"
+        # "QT_STYLE_OVERRIDE,adwaita-dark"
       ];
 
       exec-once = [
@@ -416,6 +439,7 @@ in
   };
 
   home.packages = with pkgs; [
+    discord-unread-json
     mpvpaper
     kdePackages.qtmultimedia
     brightnessctl
@@ -443,17 +467,20 @@ in
     gifski
     cliphist
     qt6.qt5compat
+    gtk3
+    gtk4
+    libunity
   ];
 
   gtk = {
     enable = true;
     theme = {
-      name = "Tokyonight-Dark";
-      package = pkgs.tokyonight-gtk-theme;
+      name = "Adwaita-dark";
+      package = pkgs.gnome-themes-extra;
     };
     iconTheme = {
-      name = "Papirus-Dark";
-      package = pkgs.papirus-icon-theme;
+      package = pkgs.adwaita-icon-theme;
+      name = "Adwaita";
     };
     gtk2.configLocation = "${config.xdg.configHome}/gtk-2.0/gtkrc";
   };
