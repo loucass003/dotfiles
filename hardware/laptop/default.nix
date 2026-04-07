@@ -17,7 +17,8 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     ../config-commons.nix
-    ../../nixos/niri
+    # ../../nixos/niri
+    ../../nixos/hyprland
     ../../nixos/syncthing.nix
   ];
 

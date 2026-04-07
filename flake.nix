@@ -96,7 +96,7 @@
         hostname = "llelievr-fw";
         modules = [
           inputs.nixos-hardware.nixosModules.framework-16-7040-amd
-          inputs.niri-flake.nixosModules.niri
+          # inputs.niri-flake.nixosModules.niri
           ./hardware/laptop/default.nix
           { home-manager.users.llelievr = import ./hardware/laptop/home/llelievr/default.nix; }
         ];

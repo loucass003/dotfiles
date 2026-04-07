@@ -72,9 +72,6 @@ in
         keybind-cheatsheet = {
           enabled = true;
         };
-        video-wallpaper = {
-          enabled = true;
-        };
       };
       version = 2;
     };
@@ -233,16 +230,14 @@ in
         disable_hyprland_logo = true;
         disable_splash_rendering = true;
         force_default_wallpaper = 0;
-        # vrr = 1;
-        vfr = false;
+        vfr = true;
+        vrr = 1;
       };
+
 
       env = [
         "GTK_THEME,Tokyonight-Dark"
         "QT_STYLE_OVERRIDE,adwaita-dark"
-        # "XDG_SESSION_TYPE,wayland"
-        # "XDG_CURRENT_DESKTOP,Hyprland"
-        # "_JAVA_AWT_WM_NONREPARENTING,1"
       ];
 
       exec-once = [
@@ -254,6 +249,7 @@ in
       windowrule = [
         "match:class ^(discord)$, workspace 8 silent"
         "match:class ^(spotify)$, workspace 9 silent"
+        "match:class ^(easyeffect)$, workspace 10 silent"
         "match:title ^(Select what to share)$, float on"
 
         # fix minecraft focus bug

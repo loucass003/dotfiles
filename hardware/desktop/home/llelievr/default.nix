@@ -25,9 +25,6 @@ in
   ];
 
   wayland.windowManager.hyprland.settings = {
-    # ── Monitors ─────────────────────────────────────────────────────────────
-    # Acer K242HL — top monitor
-    # LG UltraGear — bottom monitor (primary, VRR)
     monitor = [
       "HDMI-A-1, 1920x1080@60,   320x0,    1"
       "DP-2,     2560x1440@144,  0x1080,   1"
