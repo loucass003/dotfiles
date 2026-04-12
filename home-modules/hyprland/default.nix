@@ -274,8 +274,8 @@ in
       ];
 
       exec-once = [
-        "wl-paste --type text --watch cliphist store"
-        "wl-paste --type image --watch cliphist store"
+        "wl-clip-persist --clipboard both"
+        "wl-paste --watch cliphist store"
         "noctalia-shell"
         "discord"
         "spotify"
@@ -453,6 +453,7 @@ in
     grim
     slurp
     wl-clipboard
+    wl-clip-persist
     wf-recorder
     libnotify
     inotify-tools

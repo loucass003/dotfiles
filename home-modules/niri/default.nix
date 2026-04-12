@@ -294,6 +294,8 @@ in
     ];
 
     spawn-at-startup = [
+      { argv = [ "wl-clip-persist" "--clipboard" "both" ]; }
+      { argv = [ "sh" "-c" "wl-paste --watch cliphist store" ]; }
       { argv = [ "noctalia-shell" ]; }
     ];
 
@@ -845,6 +847,7 @@ in
     grim
     slurp
     wl-clipboard
+    wl-clip-persist
     wf-recorder
     libnotify
     inotify-tools
