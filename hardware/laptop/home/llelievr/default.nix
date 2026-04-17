@@ -109,9 +109,9 @@ in
 
   wayland.windowManager.hyprland.settings = {
     monitor = [
-      "eDP-1, 2560x1600@165, 0x0, 1.6"
-      "DP-5, 2560x1440@60, 2560x0, 1"
-      "DP-6, 2560x1440@60, 2560x1440, 1"
+      "eDP-1, 2560x1600@165, -1600x940, 1.6"
+      "DP-5, 2560x1440@60, 0x0, 1"
+      "DP-6, 2560x1440@60, 0x1440, 1"
     ];
 
     workspace = [

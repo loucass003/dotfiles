@@ -105,6 +105,8 @@
       "audio"
       "docker"
       "dialout"
+      "kvm"
+      "adbusers"
       # "libvirtd"
     ];
     shell = pkgs.zsh;

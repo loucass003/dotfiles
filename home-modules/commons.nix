@@ -138,6 +138,8 @@ in
     realvnc-vnc-viewer
 
     discord-wl
+
+    android-studio
   ];
 
   programs.obs-studio = {
