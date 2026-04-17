@@ -271,6 +271,7 @@ in
       env = [
         # "GTK_THEME,Tokyonight-Dark"
         # "QT_STYLE_OVERRIDE,adwaita-dark"
+        "_JAVA_AWT_WM_NONREPARENTING,1"
       ];
 
       exec-once = [
@@ -279,6 +280,7 @@ in
         "noctalia-shell"
         "discord"
         "spotify"
+        "easyeffects --gapplication-service"
       ];
 
       windowrule = [
@@ -290,6 +292,11 @@ in
         # fix minecraft focus bug
         "match:class ^(minecraft-launcher|Minecraft.*|FTBGOBRRRRR)$, immediate on"
         "match:class ^(minecraft-launcher|Minecraft.*|FTBGOBRRRRR)$, render_unfocused on"
+
+        # fix IntelliJ/JetBrains popup windows flickering/going out of view
+        "match:class ^(jetbrains-.*)$, match:float true, tag +jetbrains-float"
+        "match:tag ^jetbrains-float$, stay_focused on"
+        "match:tag ^jetbrains-float$, no_initial_focus on"
       ];
     };
     extraConfig = ''
