@@ -83,7 +83,7 @@ in
     ledfx
 
     orca-slicer
-    bottles
+    # bottles
     sidequest
     bambu-studio
     # lutris
@@ -132,7 +132,6 @@ in
     vlc
     mixxx
     steam-run
-    # claude-code
     obsidian
     winboat
     realvnc-vnc-viewer
@@ -140,6 +139,15 @@ in
     discord-wl
 
     android-studio
+
+    (pkgs.runCommand "claude-code-wrapped" { buildInputs = [ pkgs.makeWrapper ]; } ''
+      mkdir -p $out/bin
+      makeWrapper ${inputs.claude-code.packages.${pkgs.system}.claude-code}/bin/claude \
+        $out/bin/claude \
+        --prefix PATH : ${pkgs.nodejs}/bin
+    '')
+
+    codex
   ];
 
   programs.obs-studio = {

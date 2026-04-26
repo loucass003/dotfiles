@@ -201,7 +201,6 @@ in
     enable = true;
     systemd = {
       enable = true;
-      variables = [ "--all" ];
     };
     settings = {
       general = {
@@ -286,7 +285,7 @@ in
       windowrule = [
         "match:class ^(discord)$, workspace 8 silent"
         "match:class ^(spotify)$, workspace 9 silent"
-        "match:class ^(easyeffect)$, workspace 10 silent"
+        "match:class ^(easyeffects)$, workspace 10 silent"
         "match:title ^(Select what to share)$, float on"
 
         # fix minecraft focus bug
@@ -448,6 +447,7 @@ in
   };
 
   home.packages = with pkgs; [
+    kitty.terminfo
     discord-unread-json
     mpvpaper
     kdePackages.qtmultimedia

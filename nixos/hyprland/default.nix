@@ -23,18 +23,9 @@
     openFirewall = true;
   };
 
-  services.displayManager.sddm = {
+  services.displayManager.gdm = {
     enable = true;
-    theme = "sddm-astronaut-theme";
-    extraPackages = with pkgs.kdePackages; [
-      qtmultimedia
-      qtsvg
-    ];
   };
-
-  environment.systemPackages = [
-    pkgs.sddm-astronaut
-  ];
 
   environment.pathsToLink = [
     "/share/sddm/themes"
