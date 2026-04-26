@@ -85,6 +85,7 @@ in
     orca-slicer
     # bottles
     sidequest
+    gamescope
     bambu-studio
     # lutris
     parsec-bin

@@ -267,10 +267,20 @@ in
         vrr = 1;
       };
 
+      xwayland = {
+        use_nearest_neighbor = false;
+        force_zero_scaling = true;
+      };
+
       env = [
         # "GTK_THEME,Tokyonight-Dark"
         # "QT_STYLE_OVERRIDE,adwaita-dark"
         "_JAVA_AWT_WM_NONREPARENTING,1"
+
+        # Prefer Wayland for SDL2/SDL3 games; fall back to x11 for those that don't support it
+        "SDL_VIDEODRIVER, wayland,x11"
+        # Force Steam UI to respect monitor scaling
+        "STEAM_FORCE_DESKTOPUI_SCALING, 1"
       ];
 
       exec-once = [

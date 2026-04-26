@@ -35,6 +35,13 @@ in
       "9, monitor:HDMI-A-1"
     ];
 
+    windowrule = [
+      # Pin Steam games to the main gaming monitor and give them immediate rendering
+      "match:class ^(steam_app[0-9]+)$, monitor DP-2"
+      "match:class ^(steam_app[0-9]+)$, immediate on"
+      "match:class ^(steam_app[0-9]+)$, fullscreen on"
+    ];
+
     exec-once = [ "${mpvpaperLauncher}" ];
   };
 
