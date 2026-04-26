@@ -298,6 +298,11 @@ in
         "match:class ^(easyeffects)$, workspace 10 silent"
         "match:title ^(Select what to share)$, float on"
 
+        # fullscreen steam games
+        "match:class ^(steam_app[0-9]+)$, monitor DP-2"
+        "match:class ^(steam_app[0-9]+)$, immediate on"
+        "match:class ^(steam_app[0-9]+)$, fullscreen on"
+
         # fix minecraft focus bug
         "match:class ^(minecraft-launcher|Minecraft.*|FTBGOBRRRRR)$, immediate on"
         "match:class ^(minecraft-launcher|Minecraft.*|FTBGOBRRRRR)$, render_unfocused on"
