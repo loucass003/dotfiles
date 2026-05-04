@@ -276,16 +276,17 @@ in
         # "GTK_THEME,Tokyonight-Dark"
         # "QT_STYLE_OVERRIDE,adwaita-dark"
         "_JAVA_AWT_WM_NONREPARENTING,1"
-
         # Prefer Wayland for SDL2/SDL3 games; fall back to x11 for those that don't support it
         "SDL_VIDEODRIVER, wayland,x11"
         # Force Steam UI to respect monitor scaling
         "STEAM_FORCE_DESKTOPUI_SCALING, 1"
+        "ELECTRON_OZONE_PLATFORM_HINT,wayland"
       ];
 
       exec-once = [
-        "wl-clip-persist --clipboard both"
+        "wl-clip-persist --clipboard both --foreground"
         "wl-paste --watch cliphist store"
+        "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
         "noctalia-shell"
         "discord"
         "spotify"
@@ -465,6 +466,7 @@ in
     kitty.terminfo
     discord-unread-json
     mpvpaper
+    polkit_gnome
     kdePackages.qtmultimedia
     brightnessctl
     swaylock

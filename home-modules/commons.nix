@@ -72,6 +72,8 @@ in
     ethtool
     pciutils # lspci
     usbutils # lsusb
+    gparted    
+
     wireplumber
 
     easyeffects
